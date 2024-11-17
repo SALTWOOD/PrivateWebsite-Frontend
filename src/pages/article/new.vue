@@ -4,26 +4,40 @@
         <form @submit.prevent="submitArticle" class="article-form">
             <div class="form-group">
                 <label for="title">文章标题</label>
-                <input type="text" v-model="title" id="title" placeholder="请输入文章标题" required />
+                <v-text-field
+                    v-model="title"
+                    id="title"
+                    label="请输入文章标题"
+                    required
+                />
             </div>
 
             <div class="form-group">
                 <label for="content">文章内容</label>
-                <textarea v-model="content" id="content" placeholder="请输入文章内容" rows="10" required></textarea>
+                <v-textarea
+                    v-model="content"
+                    id="content"
+                    label="请输入文章内容"
+                    rows="10"
+                    required
+                />
             </div>
 
             <div class="form-group">
                 <label for="background">背景图片 URL</label>
-                <input type="text" v-model="background" id="background" placeholder="请输入背景图片的 URL" />
+                <v-text-field
+                    v-model="background"
+                    id="background"
+                    label="请输入背景图片的 URL"
+                />
             </div>
 
             <div class="form-group">
                 <label for="published">是否发布</label>
-                <input type="checkbox" v-model="published" id="published" />
-                <span>{{ published ? "已发布" : "未发布" }}</span>
+                <v-checkbox v-model="published" id="published" :label="published ? '已发布' : '未发布'" />
             </div>
 
-            <button type="submit" class="submit-button">提交</button>
+            <v-btn type="submit" color="primary" class="submit-button">提交</v-btn>
 
             <div v-if="error" class="error-message">{{ error }}</div>
             <div v-if="success" class="success-message">文章创建成功！</div>
@@ -32,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { useTheme } from 'vuetify';
@@ -106,43 +120,6 @@ h1 {
 
 .form-group {
     margin-bottom: 15px;
-}
-
-.form-group label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    border-color: #007bff;
-}
-
-.form-group input,
-.form-group textarea {
-    background-color: #ffffff;
-    /* 浅色模式输入框背景 */
-    color: #333;
-    /* 浅色模式文字颜色 */
-}
-
-.new-article-page.dark-mode .form-group input,
-.new-article-page.dark-mode .form-group textarea {
-    background-color: #333;
-    /* 深色模式输入框背景 */
-    color: #f0f0f0;
-    /* 深色模式文字颜色 */
 }
 
 .submit-button {
