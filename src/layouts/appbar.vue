@@ -1,7 +1,7 @@
 <template>
     <v-app-bar app color="primary">
         <v-app-bar-nav-icon @click="openDrawer" />
-        <v-toolbar-title :text="Shared.info.title" />
+        <v-toolbar-title :text="Shared.info.value.title" />
         <v-spacer />
 
         <template #append>
@@ -40,7 +40,7 @@
 
     <v-navigation-drawer v-model="drawer" :clipped="$vuetify.display.mdAndUp" :permanent="$vuetify.display.mdAndUp">
         <v-list class="mt-10" density="compact" nav>
-            <v-list-item exact prepend-icon="mdi-home-variant-outline" title="主页" :to="{ path: '/main' }" />
+            <v-list-item exact prepend-icon="mdi-home-variant-outline" title="主页" :to="{ path: '/' }" />
             <v-list-item exact prepend-icon="mdi-train" title="开往" href="https://www.travellings.cn/go.html" />
         </v-list>
     </v-navigation-drawer>
@@ -55,6 +55,7 @@ import vuetify from '@/plugins/vuetify';
 import router from '@/router';
 import { Shared } from '@/types/shared';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const isLoggedIn = ref(false);
 const isSuperAdmin = ref(false);
@@ -64,7 +65,7 @@ const drawer = ref(true);
 const isDarkMode = ref(vuetify.theme.current.value.dark);
 
 function login(): void {
-    router.push('/main/user/login');
+    router.push('/user/login');
 }
 
 function toggleTheme() {
@@ -73,7 +74,8 @@ function toggleTheme() {
 }
 
 function logout(): void {
-    // TODO: 登出逻辑
+    Cookies.remove('token');
+    location.reload();
 }
 
 function openDrawer(): void {
@@ -83,7 +85,7 @@ function openDrawer(): void {
 onMounted(async () => {
     let response = await axios.get('/api/user');
     // 判断响应
-    if (response.status !== 200 || response.headers['Content-Type'] !== 'application/json') {
+    if (response.status !== 200) {
       isLoggedIn.value = false;
       isSuperAdmin.value = false;
       return;
@@ -93,7 +95,7 @@ onMounted(async () => {
     const data = response.data as {
       permission: number,
       username: string,
-      avatar: string
+      photo: string
     };
 
     // 先处理标志位
@@ -102,11 +104,11 @@ onMounted(async () => {
 
     // 处理用户名和头像
     userName.value = data.username;
-    avatarUrl.value = data.avatar;
+    avatarUrl.value = data.photo;
 
-    response = await axios.get('/api/info');
-    if (response.status === 200 && response.headers['Content-Type'] === 'application/json') {
-        Shared.info = response.data;
+    response = await axios.get('/api/site/info');
+    if (response.status === 200) {
+        Shared.info.value = response.data;
     }
     console.log(Shared.info);
 });

@@ -1,9 +1,9 @@
 <template>
     <header class="header-image" :class="{ 'hide-header': isHeaderHidden }">
-        <div class="background-blur" :style="{ backgroundImage: 'url(' + Shared.background + ')' }"></div>
+        <div class="background-blur" :style="{ backgroundImage: `url(${Shared.background})` }"></div>
         <div class="header-content">
-            <h1>{{ Shared.info.title }}</h1>
-            <p class="header-bio">{{ Shared.info.bio }}</p>
+            <h1 v-text="Shared.info.value.title"></h1>
+            <p class="header-bio" v-text="Shared.info.value.bio"></p>
         </div>
     </header>
 </template>
