@@ -19,6 +19,7 @@ import { marked } from 'marked';
 import { Article } from '@/types/Article';
 import HeaderImage from '@/components/HeaderImage.vue';
 import vuetify from '@/plugins/vuetify';
+import { Shared } from '@/types/Shared';
 
 const route = useRoute();
 const article = ref<Article>(new Article());
@@ -38,6 +39,8 @@ async function fetchArticle() {
 
         const date = new Date(article.value.publishedAt);
         formattedDate.value = date.toLocaleDateString();
+
+        document.title = `${article.value.title} - ${Shared.info.value.title}`;
     } catch (error) {
         console.error('Error fetching article:', error);
     } finally {

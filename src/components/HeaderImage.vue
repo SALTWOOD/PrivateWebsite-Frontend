@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { Shared } from '@/types/shared';
+import { Shared } from '@/types/Shared';
 import { ref, onMounted, onUnmounted } from 'vue';
 
 // 用于控制头图是否隐藏

@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import vuetify from '@/plugins/vuetify';
 import router from '@/router';
-import { Shared } from '@/types/shared';
+import { Shared } from '@/types/Shared';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -110,6 +110,5 @@ onMounted(async () => {
     if (response.status === 200) {
         Shared.info.value = response.data;
     }
-    console.log(Shared.info);
 });
 </script>

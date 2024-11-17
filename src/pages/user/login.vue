@@ -45,7 +45,9 @@ import { onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Shared } from '@/types/shared';
+import { Shared } from '@/types/Shared';
+
+document.title = `登录 - ${Shared.info.value.title}`;
 
 // 使用 Vue Router
 const router = useRouter();
