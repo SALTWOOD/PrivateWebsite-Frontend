@@ -2,12 +2,11 @@
     <div class="article-card" @click="goToArticle">
         <div class="article-card-image" :style="{ backgroundImage: 'url(' + background + ')' }"></div>
         <div class="article-card-content">
-            <div class="article-title">{{ title }}</div> <!-- 使用 div 替代 -->
+            <div class="article-title">{{ title }}</div>
             <p>{{ author }}</p>
         </div>
     </div>
 </template>
-
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
@@ -52,8 +51,8 @@ onMounted(() => {
 <style scoped>
 .article-card {
     width: 100%;
-    max-width: 400px;
-    margin: 20px;
+    max-width: 400px;  /* 调整最大宽度，确保不超过此值 */
+    margin: 10px;  /* 减小外边距，确保紧凑排列 */
     cursor: pointer;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -79,7 +78,7 @@ onMounted(() => {
 .article-title {
     margin: 0;
     font-size: 18px;
-    color: black;  /* 修改为黑色文字 */
+    color: black;
 }
 
 .article-card-content p {

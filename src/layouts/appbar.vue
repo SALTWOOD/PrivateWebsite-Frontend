@@ -10,7 +10,8 @@
             </v-btn>
         </template>
 
-        <v-app-bar-nav-icon @click="toggleTheme" :icon="vuetify.theme.global.name.value === 'dark' ? 'mdi-moon-waxing-crescent' : 'mdi-white-balance-sunny'" />
+        <v-app-bar-nav-icon @click="toggleTheme"
+            :icon="vuetify.theme.global.name.value === 'dark' ? 'mdi-moon-waxing-crescent' : 'mdi-white-balance-sunny'" />
         <v-menu activator="#menu-activator" :close-on-content-click="false" location="end">
             <v-card>
                 <v-card-text>
@@ -21,16 +22,16 @@
                         <v-btn v-if="!isLoggedIn" prepend-icon="mdi-login" variant="text" @click="login">
                             登录
                         </v-btn>
-                      
+
                         <v-btn v-if="isLoggedIn" prepend-icon="mdi-logout" variant="text" @click="logout">
                             登出
                         </v-btn>
-                      
+
                         <!-- 切换按钮
                                     <v-btn v-if="isSuperAdmin" small @click="showSwitchDialog">
                                         切换
                                     </v-btn>-->
-                                  
+
                     </div>
                 </v-card-text>
             </v-card>
@@ -42,6 +43,8 @@
         <v-list class="mt-10" density="compact" nav>
             <v-list-item exact prepend-icon="mdi-home-variant-outline" title="主页" :to="{ path: '/' }" />
             <v-list-item exact prepend-icon="mdi-train" title="开往" href="https://www.travellings.cn/go.html" />
+            <v-list-item exact prepend-icon="mdi-publish" title="创建新文章" :to="{ path: '/article/new' }"
+                v-if="isSuperAdmin" />
         </v-list>
     </v-navigation-drawer>
 
@@ -69,8 +72,8 @@ function login(): void {
 }
 
 function toggleTheme() {
-  isDarkMode.value = !isDarkMode.value;
-  vuetify.theme.global.name.value = isDarkMode.value ? 'dark' : 'light';
+    isDarkMode.value = !isDarkMode.value;
+    vuetify.theme.global.name.value = isDarkMode.value ? 'dark' : 'light';
 }
 
 function logout(): void {
@@ -86,16 +89,16 @@ onMounted(async () => {
     let response = await axios.get('/api/user');
     // 判断响应
     if (response.status !== 200) {
-      isLoggedIn.value = false;
-      isSuperAdmin.value = false;
-      return;
+        isLoggedIn.value = false;
+        isSuperAdmin.value = false;
+        return;
     }
 
     // 登录成功后处理数据
     const data = response.data as {
-      permission: number,
-      username: string,
-      photo: string
+        permission: number,
+        username: string,
+        photo: string
     };
 
     // 先处理标志位
@@ -105,6 +108,7 @@ onMounted(async () => {
     // 处理用户名和头像
     userName.value = data.username;
     avatarUrl.value = data.photo;
+    Shared.currentUser = data;
 
     response = await axios.get('/api/site/info');
     if (response.status === 200) {

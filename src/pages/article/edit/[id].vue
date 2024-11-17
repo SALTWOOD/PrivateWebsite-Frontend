@@ -1,0 +1,153 @@
+<template>
+    <HeaderImage />
+    <br />
+    <div :class="['article-page', { 'dark-mode': isDarkMode }]">
+        <div v-if="loading" class="loading">Loading...</div>
+        <div v-else>
+            <v-form ref="form" lazy-validation>
+                <!-- 标题输入框 -->
+                <v-text-field 
+                    v-model="editedArticle.title" 
+                    label="Title" 
+                    outlined 
+                    :rules="titleRules" 
+                    class="mb-4"
+                />
+
+                <!-- 公开状态切换 -->
+                <v-switch 
+                    v-model="editedArticle.published"
+                    :label="editedArticle.published ? 'Published' : 'Unpublished'" 
+                    class="mb-4"
+                />
+
+                <h1>{{ editedArticle.title }}</h1>
+                <p><strong>{{ article.authorName }}</strong></p>
+                <p><em>{{ formattedDate }}</em></p>
+                <v-divider />
+
+                <!-- 选项卡 -->
+                <v-tabs v-model="tab" grow>
+                    <v-tab key="0">Markdown Source</v-tab>
+                    <v-tab key="1">Preview</v-tab>
+                </v-tabs>
+
+                <v-tabs-window v-model="tab">
+                    <v-tabs-window-item key="0">
+                        <v-textarea 
+                            v-model="editedArticle.content" 
+                            label="Edit Content" 
+                            :rows="15" 
+                            outlined 
+                            hint="Write your markdown here" 
+                            class="textarea">
+                        </v-textarea>
+                    </v-tabs-window-item>
+                    <v-tabs-window-item key="1">
+                        <v-card height="400px">
+                            <div class="article-content" v-html="renderedPreview"></div>
+                        </v-card>
+                    </v-tabs-window-item>
+                </v-tabs-window>
+
+                <!-- 编辑表单 -->
+                <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>
+                <v-btn @click="cancel" color="error" class="mr-3">Cancel</v-btn>
+            </v-form>
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import { marked } from 'marked';
+import { Article } from '@/types/Article';
+import HeaderImage from '@/components/HeaderImage.vue';
+import vuetify from '@/plugins/vuetify';
+import router from '@/router';
+
+const route = useRoute();
+const article = ref<Article>(new Article());
+const editedArticle = ref<Article>(new Article());
+const loading = ref(true);
+const formattedDate = ref<string>('');
+const tab = ref(0);
+const renderedPreview = computed(() => marked(editedArticle.value.content));
+
+// 获取主题模式，决定是否启用深色模式
+const isDarkMode = computed(() => vuetify.theme.current.value.dark);
+
+// 设置标题的验证规则
+const titleRules = [
+    (v: string) => !!v || 'Title is required', 
+    (v: string) => v.length <= 100 || 'Title must be less than 100 characters'
+];
+
+async function fetchArticle() {
+    const id = route.params.id;
+    try {
+        const response = await axios.get(`/api/articles/${id}`);
+        article.value = response.data;
+
+        // 初始化编辑文章内容
+        editedArticle.value = { ...article.value };
+
+        // 格式化发布日期
+        const date = new Date(article.value.publishedAt);
+        formattedDate.value = date.toLocaleDateString();
+    } catch (error) {
+        console.error('Error fetching article:', error);
+    } finally {
+        loading.value = false;
+    }
+}
+
+function cancel() {
+    router.push(`/article/${article.value.id}`);
+}
+
+async function saveArticle() {
+    try {
+        const response = await axios.put(`/api/articles/${article.value.id}`, {
+            ...editedArticle.value,
+            oldHash: article.value.hash,  // 提供 oldHash 防止并发问题
+            title: editedArticle.value.title ?? undefined,  // 如果没有改动，传 undefined
+            content: editedArticle.value.content ?? undefined,
+            published: editedArticle.value.published ?? undefined,
+            background: editedArticle.value.background ?? undefined,
+        });
+        article.value = response.data;
+        cancel();
+    } catch (error) {
+        console.error('Error saving article:', error);
+    }
+}
+
+onMounted(() => {
+    fetchArticle();
+});
+</script>
+
+<style scoped>
+/* 这里可以自定义样式 */
+.textarea {
+    min-height: 400px;
+    /* 增加高度 */
+}
+
+/* 确保选项卡内容正确显示 */
+.v-tabs-item {
+    display: none;
+}
+
+.v-tabs-item.v-tab-item--active {
+    display: block;
+}
+</style>
+
+<route lang="yaml">
+meta:
+  layout: appbar
+</route>

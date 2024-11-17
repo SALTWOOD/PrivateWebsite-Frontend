@@ -1,8 +1,10 @@
 <template>
     <HeaderImage />
-    <v-col cols="12" md="8" lg="8" v-for="(article, index) in articles" :key="index">
-        <ArticleCard :article="article" />
-    </v-col>
+    <v-row dense>
+        <v-col cols="12" md="6" lg="3" v-for="(article, index) in articles" :key="index">
+            <ArticleCard :article="article" />
+        </v-col>
+    </v-row>
 </template>
 
 <script setup lang="ts">
@@ -17,7 +19,7 @@ const articles: Ref<Article[]> = ref([]);
 
 onMounted(async () => {
     const data = (await axios.get("/api/articles")).data as Article[];
-    articles.value = data;
+    articles.value = data.reverse();
 });
 </script>
 

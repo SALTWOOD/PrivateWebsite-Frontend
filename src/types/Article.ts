@@ -7,4 +7,5 @@ export class Article {
     public id: number = 0;
     public background: string = "";
     public authorName: string = "";
+    public hash: string = "";
 }
