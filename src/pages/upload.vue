@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { FileUploader } from '@/utils/FileUploader';
 
 const fileUploader = new FileUploader();

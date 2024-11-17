@@ -4,14 +4,10 @@
       class="d-inline-block mx-2 social-link" rel="noopener noreferrer" target="_blank">
       <v-icon :icon="item.icon" :size="item.icon === '$vuetify' ? 24 : 16" />
     </a>
-
-    <div class="text-caption text-disabled" style="position: absolute; right: 16px;" v-text="footer">
-    </div>
   </v-footer>
 </template>
 
 <script setup lang="ts">
-const footer = computed(() => process.env.FOOTER || '');
 const items = [
   {
     title: 'Bilibili',

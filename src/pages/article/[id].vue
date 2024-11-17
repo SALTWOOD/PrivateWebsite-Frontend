@@ -49,7 +49,7 @@ const markdownRenderer = marked.setOptions({
 });
 
 async function fetchArticle() {
-    const id = route.params.id;
+    const id = (route.params as { id: string }).id;
     try {
         const response = await axios.get(`/api/articles/${id}`);
         article.value = response.data;
