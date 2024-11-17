@@ -86,7 +86,12 @@ function openDrawer(): void {
 }
 
 onMounted(async () => {
-    let response = await axios.get('/api/user');
+    let response = await axios.get('/api/site/info');
+    if (response.status === 200) {
+        Shared.info.value = response.data;
+    }
+
+    response = await axios.get('/api/user');
     // 判断响应
     if (response.status !== 200) {
         isLoggedIn.value = false;
@@ -109,10 +114,5 @@ onMounted(async () => {
     userName.value = data.username;
     avatarUrl.value = data.photo;
     Shared.currentUser = data;
-
-    response = await axios.get('/api/site/info');
-    if (response.status === 200) {
-        Shared.info.value = response.data;
-    }
 });
 </script>
