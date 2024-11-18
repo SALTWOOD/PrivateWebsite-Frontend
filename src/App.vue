@@ -43,13 +43,14 @@ console.log("你怎么那么无聊来看浏览器的控制台？这里可啥都�
 console.log("不过……这句话咋那么熟悉呢……？");
 
 // 拉取信息
-try {
-    let response = await axios.get('/api/site/info');
+axios.get('/api/site/info')
+.then(response => {
     if (response.status === 200) {
         Shared.info.value = response.data;
     }
-} catch (error) {
+})
+.catch((error) => {
     console.error("Failed to fetch custom website information.");
     console.error(error);
-}
+});
 </script>
