@@ -8,6 +8,8 @@
 
 <script lang="ts" setup>
 import config from "../package.json";
+import axios from "axios";
+import { Shared } from "@/types/Shared";
 
 const about = String.raw`
 This project is created by SaltWood for his own use.
@@ -39,4 +41,15 @@ const tip = String.raw`
 console.log(tip);
 console.log("你怎么那么无聊来看浏览器的控制台？这里可啥都没有哦。");
 console.log("不过……这句话咋那么熟悉呢……？");
+
+// 拉取信息
+try {
+    let response = await axios.get('/api/site/info');
+    if (response.status === 200) {
+        Shared.info.value = response.data;
+    }
+} catch (error) {
+    console.error("Failed to fetch custom website information.");
+    console.error(error);
+}
 </script>
