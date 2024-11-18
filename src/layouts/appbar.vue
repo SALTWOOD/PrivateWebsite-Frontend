@@ -64,7 +64,7 @@ const isLoggedIn = ref(false);
 const isSuperAdmin = ref(false);
 const userName = ref('未登录');
 const avatarUrl = ref('');
-const drawer = ref(true);
+const drawer = ref(null);
 const isDarkMode = ref(vuetify.theme.current.value.dark);
 
 function login(): void {
