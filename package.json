@@ -12,7 +12,7 @@
     "axios": "^1.7.7",
     "core-js": "^3.37.1",
     "js-cookie": "^3.0.5",
-    "marked": "^15.0.0",
+    "md-editor-v3": "^5.0.2",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
     "vuetify": "^3.7.0"

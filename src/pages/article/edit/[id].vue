@@ -45,7 +45,7 @@
                     </v-tabs-window-item>
                     <v-tabs-window-item key="1">
                         <v-card height="400px">
-                            <div class="article-content" v-html="renderedPreview"></div>
+                            <div>编辑功能暂停开放……</div>
                         </v-card>
                     </v-tabs-window-item>
                 </v-tabs-window>
@@ -62,7 +62,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { marked } from 'marked';
+import { MdEditor } from 'md-editor-v3';
 import { Article } from '@/types/Article';
 import HeaderImage from '@/components/HeaderImage.vue';
 import vuetify from '@/plugins/vuetify';
@@ -74,7 +74,6 @@ const editedArticle = ref<Article>(new Article());
 const loading = ref(true);
 const formattedDate = ref<string>('');
 const tab = ref(0);
-const renderedPreview = computed(() => marked(editedArticle.value.content));
 
 // 获取主题模式，决定是否启用深色模式
 const isDarkMode = computed(() => vuetify.theme.current.value.dark);

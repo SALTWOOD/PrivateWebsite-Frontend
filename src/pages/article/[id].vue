@@ -16,7 +16,8 @@
             </div>
 
             <!-- 文章内容 -->
-            <div class="article-content" v-html="articleContent"></div>
+            <MdPreview :id="id" :modelValue="articleContent" />
+            <MdCatalog :editorId="id" :scrollElement="scrollElement" />
         </div>
     </div>
 </template>
@@ -25,11 +26,12 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
-import { marked } from 'marked';
+import { MdPreview, MdCatalog } from 'md-editor-v3';
 import { Article } from '@/types/Article';
 import HeaderImage from '@/components/HeaderImage.vue';
 import vuetify from '@/plugins/vuetify';
 import { Shared } from '@/types/Shared';
+import 'md-editor-v3/lib/preview.css';
 
 const route = useRoute();
 const router = useRouter();
@@ -37,25 +39,18 @@ const article = ref<Article>(new Article());
 const articleContent = ref<string>('');
 const loading = ref(true);
 const formattedDate = ref<string>('');
+const id = "preview";
+const scrollElement = document.documentElement;
 
 // 获取主题模式，决定是否启用深色模式
 const isDarkMode = computed(() => vuetify.theme.current.value.dark);
-
-// 自定义 Markdown 渲染器配置
-const markdownRenderer = marked.setOptions({
-    breaks: true,  // 启用换行符自动转换为 <br>
-    gfm: true,  // 启用 GitHub Flavored Markdown
-    renderer: new marked.Renderer()
-});
 
 async function fetchArticle() {
     const id = (route.params as { id: string }).id;
     try {
         const response = await axios.get(`/api/articles/${id}`);
         article.value = response.data;
-
-        // 将 Markdown 转换为 HTML
-        articleContent.value = await markdownRenderer(article.value.content);
+        articleContent.value = article.content;
 
         // 格式化发布日期
         const date = new Date(article.value.publishedAt);
