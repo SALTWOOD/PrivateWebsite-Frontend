@@ -16,7 +16,7 @@
             </div>
 
             <!-- 文章内容 -->
-            <MdPreview class="article-content" :id="id" :modelValue="articleContent" :theme="vuetify.theme.global.name.value" />
+            <MdPreview :id="id" :modelValue="articleContent" :theme="vuetify.theme.global.name.value" />
             <MdCatalog :editorId="id" :scrollElement="scrollElement" />
         </div>
     </div>
@@ -104,10 +104,6 @@ onMounted(() => {
 .loading {
     text-align: center;
     font-size: 18px;
-}
-
-.article-content {
-    background-color: #121212;
 }
 </style>
 
