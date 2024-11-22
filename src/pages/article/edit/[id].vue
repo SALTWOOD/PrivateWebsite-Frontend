@@ -26,29 +26,7 @@
                 <p><em>{{ formattedDate }}</em></p>
                 <v-divider />
 
-                <!-- 选项卡 -->
-                <v-tabs v-model="tab" grow>
-                    <v-tab key="0">Markdown Source</v-tab>
-                    <v-tab key="1">Preview</v-tab>
-                </v-tabs>
-
-                <v-tabs-window v-model="tab">
-                    <v-tabs-window-item key="0">
-                        <v-textarea 
-                            v-model="editedArticle.content" 
-                            label="Edit Content" 
-                            :rows="15" 
-                            outlined 
-                            hint="Write your markdown here" 
-                            class="textarea">
-                        </v-textarea>
-                    </v-tabs-window-item>
-                    <v-tabs-window-item key="1">
-                        <v-card height="400px">
-                            <div>编辑功能暂停开放……</div>
-                        </v-card>
-                    </v-tabs-window-item>
-                </v-tabs-window>
+                <MdEditor v-model="editedArticle.content" />
 
                 <!-- 编辑表单 -->
                 <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>
@@ -67,6 +45,7 @@ import { Article } from '@/types/Article';
 import HeaderImage from '@/components/HeaderImage.vue';
 import vuetify from '@/plugins/vuetify';
 import router from '@/router';
+import 'md-editor-v3/lib/style.css';
 
 const route = useRoute();
 const article = ref<Article>(new Article());
@@ -134,15 +113,6 @@ onMounted(() => {
 .textarea {
     min-height: 400px;
     /* 增加高度 */
-}
-
-/* 确保选项卡内容正确显示 */
-.v-tabs-item {
-    display: none;
-}
-
-.v-tabs-item.v-tab-item--active {
-    display: block;
 }
 </style>
 
