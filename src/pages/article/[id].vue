@@ -50,7 +50,7 @@ async function fetchArticle() {
     try {
         const response = await axios.get(`/api/articles/${id}`);
         article.value = response.data;
-        articleContent.value = article.content;
+        articleContent.value = article.value.content;
 
         // 格式化发布日期
         const date = new Date(article.value.publishedAt);
