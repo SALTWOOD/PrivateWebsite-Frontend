@@ -17,7 +17,7 @@
                 <!-- 公开状态切换 -->
                 <v-switch 
                     v-model="editedArticle.published"
-                    :label="editedArticle.published ? 'Published' : 'Unpublished'" 
+                    :label="editedArticle.published ? '已发布' : '未发布'" 
                     class="mb-4"
                 />
 
