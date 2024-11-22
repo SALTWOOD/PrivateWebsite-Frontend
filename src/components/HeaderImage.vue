@@ -10,23 +10,6 @@
 
 <script setup lang="ts">
 import { Shared } from '@/types/Shared';
-import { ref, onMounted, onUnmounted } from 'vue';
-
-// 用于控制头图是否隐藏
-const isHeaderHidden = ref(false);
-
-// 处理滚动事件，判断是否需要隐藏头图
-function handleScroll() {
-  isHeaderHidden.value = window.scrollY > 100;  // 滚动超过100px时隐藏头图
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
 </script>
 
 <style scoped>
