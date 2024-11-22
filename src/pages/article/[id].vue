@@ -16,7 +16,7 @@
             </div>
 
             <!-- 文章内容 -->
-            <MdPreview :id="id" :modelValue="articleContent" />
+            <MdPreview class="article-content" :id="id" :modelValue="articleContent" :theme="vuetify.theme.global.name.value" />
             <MdCatalog :editorId="id" :scrollElement="scrollElement" />
         </div>
     </div>
@@ -107,45 +107,7 @@ onMounted(() => {
 }
 
 .article-content {
-    margin-top: 20px;
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-.article-content h1,
-.article-content h2,
-.article-content h3 {
-    transition: color 0.3s ease;
-}
-
-.article-content.dark-mode h1,
-.article-content.dark-mode h2,
-.article-content.dark-mode h3 {
-    color: #e0e0e0;
-}
-
-.article-content a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.article-content a:hover {
-    text-decoration: underline;
-}
-
-.article-content.dark-mode a {
-    color: #66b2ff;
-}
-
-.article-content code {
-    background-color: #f0f0f0;
-    padding: 2px 5px;
-    border-radius: 4px;
-}
-
-.article-content.dark-mode code {
-    background-color: #2d2d2d;
-    color: #f0f0f0;
+    background-color: #121212;
 }
 </style>
 
