@@ -26,7 +26,7 @@
                 <p><em>{{ formattedDate }}</em></p>
                 <v-divider />
 
-                <MdEditor v-model="editedArticle.content" />
+                <MdEditor v-model="editedArticle.content" :preview="vuetify.display.mdAndUp"/>
 
                 <!-- 编辑表单 -->
                 <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>

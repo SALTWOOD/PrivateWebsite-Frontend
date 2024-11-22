@@ -14,19 +14,18 @@
                 <v-btn @click="redirectToEditPage" color="primary" class="mr-3">Edit Article</v-btn>
                 <v-btn @click="deleteArticle" color="red" class="mr-3">Delete Article</v-btn>
             </div>
-
-            <!-- 文章内容 -->
-            <MdPreview :id="id" :modelValue="articleContent" :theme="vuetify.theme.global.name.value" />
-            <MdCatalog :editorId="id" :scrollElement="scrollElement" />
         </div>
     </div>
+
+    <!-- 文章内容 -->
+    <MdPreview :id="'preview'" :modelValue="articleContent" :theme="vuetify.theme.global.name.value" />
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
-import { MdPreview, MdCatalog } from 'md-editor-v3';
+import { MdPreview } from 'md-editor-v3';
 import { Article } from '@/types/Article';
 import HeaderImage from '@/components/HeaderImage.vue';
 import vuetify from '@/plugins/vuetify';
@@ -39,7 +38,6 @@ const article = ref<Article>(new Article());
 const articleContent = ref<string>('');
 const loading = ref(true);
 const formattedDate = ref<string>('');
-const id = "preview";
 const scrollElement = document.documentElement;
 
 // 获取主题模式，决定是否启用深色模式
