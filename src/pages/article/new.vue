@@ -13,6 +13,16 @@
             </div>
 
             <div class="form-group">
+                <label for="title">文章描述</label>
+                <v-text-field
+                    v-model="description"
+                    id="description"
+                    label="请输入文章描述"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
                 <label for="content">文章内容</label>
                 <v-textarea
                     v-model="content"
@@ -53,6 +63,7 @@ import { useTheme } from 'vuetify';
 
 const title = ref('');
 const content = ref('');
+const description = ref('');
 const background = ref('');
 const published = ref(false);
 const error = ref('');
@@ -69,6 +80,7 @@ async function submitArticle() {
         const newArticle = {
             title: title.value,
             content: content.value,
+            description: description.value,
             background: background.value,
             published: published.value,
         };

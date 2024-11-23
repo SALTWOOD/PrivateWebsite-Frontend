@@ -1,6 +1,7 @@
 export class Article {
     public author: number = 0;
     public content: string = "";
+    public description: string = "";
     public published: boolean = false;
     public publishedAt: number = Date.now();
     public title: string = "";

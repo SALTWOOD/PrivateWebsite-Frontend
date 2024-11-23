@@ -18,7 +18,7 @@
     </div>
 
     <!-- 文章内容 -->
-    <MdPreview :id="'preview'" :modelValue="articleContent" :theme="vuetify.theme.global.name.value" />
+    <MdPreview :id="'preview'" :modelValue="articleContent" :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
 </template>
 
 <script setup lang="ts">
@@ -38,7 +38,6 @@ const article = ref<Article>(new Article());
 const articleContent = ref<string>('');
 const loading = ref(true);
 const formattedDate = ref<string>('');
-const scrollElement = document.documentElement;
 
 // 获取主题模式，决定是否启用深色模式
 const isDarkMode = computed(() => vuetify.theme.current.value.dark);

@@ -14,6 +14,15 @@
                     class="mb-4"
                 />
 
+                <!-- 描述输入框 -->
+                <v-text-field 
+                    v-model="editedArticle.description" 
+                    label="Description" 
+                    outlined 
+                    :rules="titleRules"
+                    class="mb-4"
+                />
+
                 <!-- 公开状态切换 -->
                 <v-switch 
                     v-model="editedArticle.published"
@@ -26,7 +35,7 @@
                 <p><em>{{ formattedDate }}</em></p>
                 <v-divider />
 
-                <MdEditor v-model="editedArticle.content" :preview="vuetify.display.mdAndUp"/>
+                <MdEditor v-model="editedArticle.content" :preview="vuetify.display.mdAndUp.value"/>
 
                 <!-- 编辑表单 -->
                 <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>
@@ -52,7 +61,6 @@ const article = ref<Article>(new Article());
 const editedArticle = ref<Article>(new Article());
 const loading = ref(true);
 const formattedDate = ref<string>('');
-const tab = ref(0);
 
 // 获取主题模式，决定是否启用深色模式
 const isDarkMode = computed(() => vuetify.theme.current.value.dark);
@@ -93,6 +101,7 @@ async function saveArticle() {
             oldHash: article.value.hash,  // 提供 oldHash 防止并发问题
             title: editedArticle.value.title ?? undefined,  // 如果没有改动，传 undefined
             content: editedArticle.value.content ?? undefined,
+            description: editedArticle.value.description ?? undefined,
             published: editedArticle.value.published ?? undefined,
             background: editedArticle.value.background ?? undefined,
         });
