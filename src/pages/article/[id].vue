@@ -18,7 +18,7 @@
     </div>
 
     <!-- 文章内容 -->
-    <MdPreview :id="'preview'" :modelValue="articleContent" :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
+    <MdPreview :class="isDarkMode ?'dark-md-reader' : ''" :id="'preview'" :modelValue="articleContent" :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
 </template>
 
 <script setup lang="ts">
@@ -101,6 +101,11 @@ onMounted(() => {
 .loading {
     text-align: center;
     font-size: 18px;
+}
+
+.dark-md-reader {
+    background-color: #121212;
+    color: #f0f0f0;
 }
 </style>
 
