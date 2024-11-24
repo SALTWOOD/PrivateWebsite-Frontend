@@ -26,8 +26,7 @@
                 <p><em>{{ `最后更新于 ${formattedUpdateDate}` }}</em></p>
                 <v-divider />
 
-                <MdEditor v-model="editedArticle.content" :preview="vuetify.display.mdAndUp.value"
-                    :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
+                <ManagedEditor :content="editedArticle.content" />
 
                 <!-- 编辑表单 -->
                 <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>
@@ -41,12 +40,11 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import { MdEditor } from 'md-editor-v3';
 import { Article } from '@/types/Article';
 import HeaderImage from '@/components/HeaderImage.vue';
 import vuetify from '@/plugins/vuetify';
 import router from '@/router';
-import 'md-editor-v3/lib/style.css';
+import ManagedEditor from '@/components/ManagedEditor.vue';
 
 const route = useRoute();
 const article = ref<Article>(new Article());

@@ -13,8 +13,7 @@
             </div>
 
             <label for="background">文章内容</label>
-            <MdEditor v-model="content" :preview="vuetify.display.mdAndUp.value"
-                :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
+            <ManagedEditor :content="content" />
             <br />
 
             <div class="form-group">
@@ -40,9 +39,6 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { useTheme } from 'vuetify';
-import vuetify from '@/plugins/vuetify';
-import { MdEditor } from 'md-editor-v3';
-import 'md-editor-v3/lib/style.css';
 
 const title = ref('');
 const content = ref('');

@@ -12,6 +12,7 @@ declare module 'vue' {
     Comment: typeof import('./components/Comment.vue')['default']
     CommentCard: typeof import('./components/CommentCard.vue')['default']
     HeaderImage: typeof import('./components/HeaderImage.vue')['default']
+    ManagedEditor: typeof import('./components/ManagedEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SnackbarManager: typeof import('./components/SnackbarManager.vue')['default']
