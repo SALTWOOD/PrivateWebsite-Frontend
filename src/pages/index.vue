@@ -1,7 +1,7 @@
 <template>
     <HeaderImage />
     <v-row dense>
-        <v-col cols="12" md="6" lg="3" v-for="(article, index) in articles" :key="index">
+        <v-col cols="12" xl="3" lg="4" md="6" v-for="(article, index) in articles" :key="index">
             <ArticleCard :article="article" />
         </v-col>
     </v-row>

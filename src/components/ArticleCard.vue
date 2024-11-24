@@ -53,13 +53,14 @@ onMounted(() => {
 <style scoped>
 .article-card {
     width: 100%;
-    max-width: 400px;  /* 调整最大宽度，确保不超过此值 */
-    margin: 10px;  /* 减小外边距，确保紧凑排列 */
+    max-width: 400px;
     cursor: pointer;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: transform 0.3s ease;
+    box-sizing: border-box;
+    /* 确保元素尺寸包括padding和border */
 }
 
 .article-card:hover {
@@ -74,13 +75,23 @@ onMounted(() => {
 
 .article-card-content {
     padding: 15px;
+    /* 统一调整padding */
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* 保证标题和其他内容有合适的空间 */
+    height: 100%;
+    /* 保证内容充满卡片 */
+    box-sizing: border-box;
+    /* 确保padding不会影响布局 */
 }
 
 .article-title {
     margin: 0;
     font-size: 18px;
     color: black;
+    font-weight: bold;
 }
 
 .article-card-content p {
