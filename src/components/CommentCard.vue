@@ -125,7 +125,7 @@ async function deleteComment() {
         return;
     }
     try {
-        const response = await axios.delete(`/api/comment/${comment.value.id}`);
+        const response = await axios.delete(`/api/comment/${comment.value.article}/${comment.value.id}`);
         if (response.status === 200) {
             isRemoved.value = true;
             showSnackbar('评论已删除！');
