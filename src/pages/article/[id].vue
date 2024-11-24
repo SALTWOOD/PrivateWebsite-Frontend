@@ -27,7 +27,7 @@
 
     <!-- 提交评论 -->
     <div>
-        <v-textarea v-model="newCommentContent" label="评论" rows="3" :rules="rules"></v-textarea>
+        <v-textarea v-model="newCommentContent" label="评论" rows="4" :rules="rules"></v-textarea>
         <v-btn @click="postComment" color="primary">
             <v-icon icon="mdi-send"></v-icon>发送评论
         </v-btn>

@@ -65,7 +65,7 @@
 
         <!-- 回复表单 -->
         <div v-if="Shared.currentUser && isReplying">
-            <v-textarea v-model="replyContent" label="回复" rows="2" />
+            <v-textarea v-model="replyContent" label="回复" rows="4" />
             <v-btn @click="postReply(comment.id)" color="primary">发送回复</v-btn>
         </div>
 
