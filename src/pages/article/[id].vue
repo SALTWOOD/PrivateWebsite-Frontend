@@ -5,7 +5,8 @@
         <div v-else>
             <h1>{{ article.title }}</h1>
             <p><strong>{{ article.authorName }}</strong></p>
-            <p><em>{{ formattedDate }}</em></p>
+            <p><em>{{ `发布于 ${formattedDate}` }}</em></p>
+            <p><em>{{ `最后更新于 ${formattedUpdateDate}` }}</em></p>
             <v-divider />
             <br />
 
@@ -69,6 +70,7 @@ const article = ref<Article>(new Article());
 const articleContent = ref<string>('');
 const loading = ref(true);
 const formattedDate = ref<string>('');
+const formattedUpdateDate = ref<string>('');
 const comments = ref<Comment[]>([]);
 const newCommentContent = ref<string>('');
 const page = ref<number>(0);
@@ -98,8 +100,8 @@ async function fetchArticle() {
         article.value = response.data;
         articleContent.value = article.value.content;
 
-        const date = new Date(article.value.publishedAt);
-        formattedDate.value = date.toLocaleDateString();
+        formattedDate.value = new Date(article.value.publishedAt).toLocaleString();
+        formattedUpdateDate.value = new Date(article.value.lastUpdated).toLocaleString();
 
         document.title = `${article.value.title} - ${Shared.info.value.title}`;
     } catch (error) {

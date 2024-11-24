@@ -3,7 +3,7 @@
         <div class="article-card-image" :style="{ backgroundImage: 'url(' + background + ')' }"></div>
         <div class="article-card-content">
             <div class="article-title">{{ title }}</div>
-            <p>{{ author }}</p>
+            <p>{{ `${author} · 更新于 ${date}` }}</p>
         </div>
     </div>
 </template>
@@ -24,6 +24,7 @@ const title = ref('');
 const background = ref('');
 const author = ref('');
 const url = ref('');
+const date = ref('');
 
 const router = useRouter();
 
@@ -34,6 +35,7 @@ async function fetchArticleData() {
         background.value = data.background;
         author.value = data.authorName;
         url.value = `/article/${data.id}`;
+        date.value = new Date(props.article.lastUpdated).toLocaleDateString();
     } catch (error) {
         console.error('Error fetching article data:', error);
     }

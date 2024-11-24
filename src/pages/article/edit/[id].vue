@@ -32,7 +32,8 @@
 
                 <h1>{{ editedArticle.title }}</h1>
                 <p><strong>{{ article.authorName }}</strong></p>
-                <p><em>{{ formattedDate }}</em></p>
+                <p><em>{{ `发布于 ${formattedDate}` }}</em></p>
+                <p><em>{{ `最后更新于 ${formattedUpdateDate}` }}</em></p>
                 <v-divider />
 
                 <MdEditor v-model="editedArticle.content" :preview="vuetify.display.mdAndUp.value"/>
@@ -61,6 +62,7 @@ const article = ref<Article>(new Article());
 const editedArticle = ref<Article>(new Article());
 const loading = ref(true);
 const formattedDate = ref<string>('');
+const formattedUpdateDate = ref<string>('');
 
 // 获取主题模式，决定是否启用深色模式
 const isDarkMode = computed(() => vuetify.theme.current.value.dark);
@@ -81,8 +83,8 @@ async function fetchArticle() {
         editedArticle.value = { ...article.value };
 
         // 格式化发布日期
-        const date = new Date(article.value.publishedAt);
-        formattedDate.value = date.toLocaleDateString();
+        formattedDate.value = new Date(article.value.publishedAt).toLocaleString();
+        formattedUpdateDate.value = new Date(article.value.lastUpdated).toLocaleString();
     } catch (error) {
         console.error('Error fetching article:', error);
     } finally {
