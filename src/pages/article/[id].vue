@@ -18,7 +18,28 @@
     </div>
 
     <!-- 文章内容 -->
-    <MdPreview :class="isDarkMode ?'dark-md-reader' : ''" :id="'preview'" :modelValue="articleContent" :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
+    <MdPreview :class="isDarkMode ? 'dark-md-reader' : ''" :id="'preview'" :modelValue="articleContent"
+        :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
+
+    <v-divider />
+    <br />
+
+    <!-- 提交评论 -->
+    <div v-if="isAuthenticated">
+        <v-textarea v-model="newCommentContent" label="评论" rows="3"></v-textarea>
+        <v-btn @click="postComment" color="primary">发送评论</v-btn>
+    </div>
+    <br />
+
+    <!-- 评论区 -->
+    <div v-if="comments.length > 0">
+        <div v-for="comment in comments" :key="comment.id" class="comment">
+            <CommentCard :comment="comment" />
+        </div>
+
+        <!-- 加载更多评论 -->
+        <v-btn v-if="hasMoreComments" @click="loadMoreComments" color="secondary">加载更多</v-btn>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -27,10 +48,13 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { MdPreview } from 'md-editor-v3';
 import { Article } from '@/types/Article';
+import { Comment } from '@/types/Comment';
+import CommentCard from '@/components/CommentCard.vue';
 import HeaderImage from '@/components/HeaderImage.vue';
 import vuetify from '@/plugins/vuetify';
 import { Shared } from '@/types/Shared';
 import 'md-editor-v3/lib/preview.css';
+import Cookies from 'js-cookie'; // 用于管理 token
 
 const route = useRoute();
 const router = useRouter();
@@ -38,8 +62,12 @@ const article = ref<Article>(new Article());
 const articleContent = ref<string>('');
 const loading = ref(true);
 const formattedDate = ref<string>('');
+const comments = ref<Comment[]>([]);
+const newCommentContent = ref<string>('');
+const page = ref<number>(0);
+const hasMoreComments = ref<boolean>(true);
+const isAuthenticated = computed(() => !!Cookies.get('token')); // 检查是否已登录
 
-// 获取主题模式，决定是否启用深色模式
 const isDarkMode = computed(() => vuetify.theme.current.value.dark);
 
 async function fetchArticle() {
@@ -49,16 +77,29 @@ async function fetchArticle() {
         article.value = response.data;
         articleContent.value = article.value.content;
 
-        // 格式化发布日期
         const date = new Date(article.value.publishedAt);
         formattedDate.value = date.toLocaleDateString();
 
-        // 设置页面标题
         document.title = `${article.value.title} - ${Shared.info.value.title}`;
     } catch (error) {
         console.error('Error fetching article:', error);
     } finally {
         loading.value = false;
+    }
+}
+
+async function fetchComments() {
+    const id = (route.params as { id: string }).id;
+    try {
+        const response = await axios.get(`/api/comment/${id}`, { params: { page: page.value } });
+        if (response.data.comments.length > 0) {
+            comments.value.push(...response.data.comments);
+            page.value += 1;
+        } else {
+            hasMoreComments.value = false;
+        }
+    } catch (error) {
+        console.error('Error fetching comments:', error);
     }
 }
 
@@ -78,8 +119,36 @@ async function deleteArticle() {
     }
 }
 
+async function postComment() {
+    const token = Cookies.get('token');
+    if (!token) {
+        alert('You need to be logged in to comment.');
+        return;
+    }
+
+    const id = (route.params as { id: string }).id;
+    try {
+        await axios.post(`/api/comment/${id}`, {
+            content: newCommentContent.value,
+            parent: null
+        }, { headers: { Authorization: `Bearer ${token}` } });
+
+        newCommentContent.value = ''; // 清空输入框
+        fetchComments(); // 重新加载评论
+    } catch (error) {
+        console.error('Error posting comment:', error);
+    }
+}
+
+function loadMoreComments() {
+    if (hasMoreComments.value) {
+        fetchComments(); // 加载更多评论
+    }
+}
+
 onMounted(() => {
     fetchArticle();
+    fetchComments(); // 初始化加载评论
 });
 </script>
 
@@ -101,6 +170,16 @@ onMounted(() => {
 .loading {
     text-align: center;
     font-size: 18px;
+}
+
+.comment {
+    margin-bottom: 20px;
+}
+
+.reply {
+    margin-left: 20px;
+    border-left: 2px solid #ddd;
+    padding-left: 20px;
 }
 
 .dark-md-reader {

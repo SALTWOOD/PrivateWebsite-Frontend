@@ -57,14 +57,13 @@
 import vuetify from '@/plugins/vuetify';
 import router from '@/router';
 import { Shared } from '@/types/Shared';
-import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const isLoggedIn = ref(false);
-const isSuperAdmin = ref(false);
-const userName = ref('未登录');
-const avatarUrl = ref('');
-const drawer = ref(null);
+const isLoggedIn = computed(() => Boolean(Shared.currentUser));
+const isSuperAdmin = computed(() => (Shared.currentUser?.permission || 0) > 0);
+const userName = computed(() => (Shared.currentUser?.username || '未登录'));
+const avatarUrl = computed(() => Shared.currentUser?.photo || '/main/default_avatar.png');
+const drawer: Ref<boolean | null> = ref(null);
 const isDarkMode = ref(vuetify.theme.current.value.dark);
 
 function login(): void {
@@ -82,32 +81,9 @@ function logout(): void {
 }
 
 function openDrawer(): void {
-    drawer.value = !drawer.value;
+    drawer.value = !(drawer.value ?? false);
 }
 
 onMounted(async () => {
-    let response = await axios.get('/api/user');
-    // 判断响应
-    if (response.status !== 200) {
-        isLoggedIn.value = false;
-        isSuperAdmin.value = false;
-        return;
-    }
-
-    // 登录成功后处理数据
-    const data = response.data as {
-        permission: number,
-        username: string,
-        photo: string
-    };
-
-    // 先处理标志位
-    isLoggedIn.value = true;
-    isSuperAdmin.value = data.permission >= 1;
-
-    // 处理用户名和头像
-    userName.value = data.username;
-    avatarUrl.value = data.photo;
-    Shared.currentUser = data;
 });
 </script>

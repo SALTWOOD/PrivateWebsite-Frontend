@@ -2,14 +2,16 @@
   <v-app>
     <v-main>
       <router-view />
+      <SnackbarManager />
     </v-main>
   </v-app>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts" >
 import config from "../package.json";
 import axios from "axios";
 import { Shared } from "@/types/Shared";
+import { UserEntity } from "./types/UserEntity";
 
 const about = String.raw`
 This project is created by SaltWood for his own use.
@@ -44,13 +46,29 @@ console.log("不过……这句话咋那么熟悉呢……？");
 
 // 拉取信息
 axios.get('/api/site/info')
-.then(response => {
+  .then(response => {
     if (response.status === 200) {
-        Shared.info.value = response.data;
+      Shared.info.value = response.data;
     }
-})
-.catch((error) => {
+  })
+  .catch((error) => {
     console.error("Failed to fetch custom website information.");
     console.error(error);
-});
+  });
+
+
+axios.get('/api/user')
+  .then(response => {
+    // 判断响应
+    if (response.status !== 200) {
+      return;
+    }
+    // 登录成功后处理数据
+    const data = response.data as UserEntity;
+    Shared.currentUser = data;
+  })
+  .catch((error) => {
+    console.error("Failed to fetch user information.");
+    console.error(error);
+  });
 </script>
