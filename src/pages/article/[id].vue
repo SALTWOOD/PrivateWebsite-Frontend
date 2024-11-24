@@ -17,6 +17,9 @@
             </div>
         </div>
     </div>
+    <br />
+    <v-divider />
+    <br />
 
     <!-- 文章内容 -->
     <MdPreview :class="isDarkMode ? 'dark-md-reader' : ''" :id="'preview'" :modelValue="articleContent"
