@@ -1,6 +1,6 @@
 <template>
     <HeaderImage />
-    <div :class="['article-page', { 'dark-mode': isDarkMode }]">
+    <div :class="{ 'dark-mode': isDarkMode }">
         <div v-if="loading" class="loading">Loading...</div>
         <div v-else>
             <h1>{{ article.title }}</h1>
