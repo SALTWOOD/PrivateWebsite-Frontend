@@ -6,10 +6,14 @@
         <div v-else>
             <v-form ref="form" lazy-validation>
                 <!-- 标题输入框 -->
-                <v-text-field v-model="editedArticle.title" label="Title" outlined :rules="titleRules" class="mb-4" />
+                <v-text-field v-model="editedArticle.title" label="标题" outlined :rules="titleRules" class="mb-4" />
 
                 <!-- 描述输入框 -->
-                <v-text-field v-model="editedArticle.description" label="Description" outlined :rules="titleRules"
+                <v-text-field v-model="editedArticle.description" label="描述" outlined :rules="titleRules"
+                    class="mb-4" />
+
+                <!-- 背景图输入框 -->
+                <v-text-field v-model="editedArticle.background" label="背景图" outlined :rules="titleRules"
                     class="mb-4" />
 
                 <!-- 公开状态切换 -->
@@ -23,7 +27,7 @@
                 <v-divider />
 
                 <MdEditor v-model="editedArticle.content" :preview="vuetify.display.mdAndUp.value"
-                    :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
+                    :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" :max-length="1000" />
 
                 <!-- 编辑表单 -->
                 <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>
