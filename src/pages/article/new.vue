@@ -22,16 +22,8 @@
                 />
             </div>
 
-            <div class="form-group">
-                <label for="content">文章内容</label>
-                <v-textarea
-                    v-model="content"
-                    id="content"
-                    label="请输入文章内容"
-                    rows="10"
-                    required
-                />
-            </div>
+            <label for="background">背景图片 URL</label>
+            <MdEditor v-model="content" :preview="vuetify.display.mdAndUp.value" :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
 
             <div class="form-group">
                 <label for="background">背景图片 URL</label>
@@ -60,6 +52,7 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { useTheme } from 'vuetify';
+import vuetify from '@/plugins/vuetify';
 
 const title = ref('');
 const content = ref('');
@@ -101,7 +94,7 @@ async function submitArticle() {
 
 <style scoped>
 .new-article-page {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
     background-color: #f9f9f9;

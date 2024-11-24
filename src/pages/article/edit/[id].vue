@@ -6,29 +6,15 @@
         <div v-else>
             <v-form ref="form" lazy-validation>
                 <!-- 标题输入框 -->
-                <v-text-field 
-                    v-model="editedArticle.title" 
-                    label="Title" 
-                    outlined 
-                    :rules="titleRules" 
-                    class="mb-4"
-                />
+                <v-text-field v-model="editedArticle.title" label="Title" outlined :rules="titleRules" class="mb-4" />
 
                 <!-- 描述输入框 -->
-                <v-text-field 
-                    v-model="editedArticle.description" 
-                    label="Description" 
-                    outlined 
-                    :rules="titleRules"
-                    class="mb-4"
-                />
+                <v-text-field v-model="editedArticle.description" label="Description" outlined :rules="titleRules"
+                    class="mb-4" />
 
                 <!-- 公开状态切换 -->
-                <v-switch 
-                    v-model="editedArticle.published"
-                    :label="editedArticle.published ? '已发布' : '未发布'" 
-                    class="mb-4"
-                />
+                <v-switch v-model="editedArticle.published" :label="editedArticle.published ? '已发布' : '未发布'"
+                    class="mb-4" />
 
                 <h1>{{ editedArticle.title }}</h1>
                 <p><strong>{{ article.authorName }}</strong></p>
@@ -36,7 +22,7 @@
                 <p><em>{{ `最后更新于 ${formattedUpdateDate}` }}</em></p>
                 <v-divider />
 
-                <MdEditor v-model="editedArticle.content" :preview="vuetify.display.mdAndUp.value"/>
+                <MdEditor v-model="editedArticle.content" :preview="vuetify.display.mdAndUp.value" :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
 
                 <!-- 编辑表单 -->
                 <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>
@@ -69,7 +55,7 @@ const isDarkMode = computed(() => vuetify.theme.current.value.dark);
 
 // 设置标题的验证规则
 const titleRules = [
-    (v: string) => !!v || 'Title is required', 
+    (v: string) => !!v || 'Title is required',
     (v: string) => v.length <= 100 || 'Title must be less than 100 characters'
 ];
 

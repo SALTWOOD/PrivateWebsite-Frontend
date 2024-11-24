@@ -92,7 +92,7 @@ const startUpload = async () => {
 
 <style scoped>
 .file-upload {
-    max-width: 600px;
+    max-width: 1000px;
     margin: 0 auto;
     text-align: center;
 }
