@@ -1,8 +1,10 @@
 <template>
     <div class="file-upload">
         <h1>文件上传</h1>
+        <v-divider />
+        <br />
 
-        <input type="file" @change="handleFileChange" />
+        <v-file-input :rules="rules" v-model="selectedFile" @change="handleFileChange" :disabled="isUploading"></v-file-input>
         <button @click="startUpload" :disabled="isUploading">开始上传</button>
 
         <div v-if="isUploading" class="progress-container">
@@ -18,7 +20,7 @@
 
         <div v-if="uploadSuccess">
             <p>上传成功！</p>
-            <p>文件访问 URL: 
+            <p>文件访问 URL:
                 <a :href="fileUrl" target="_blank">{{ fileUrl }}</a>
             </p>
         </div>
@@ -36,6 +38,10 @@ const progress = ref(0);  // 用于绑定前端进度条
 const uploadError = ref<string | null>(null);
 const uploadSuccess = ref(false);
 const fileUrl = ref('');
+
+const rules = [
+    (value: File[]) => !value || !value.length || value[0].size < 50 * Math.pow(1024, 2) || '文件大小不能超过 50 MiB!'
+]
 
 // 处理文件选择
 const handleFileChange = (event: Event) => {

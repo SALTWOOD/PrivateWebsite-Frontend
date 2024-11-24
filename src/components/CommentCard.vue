@@ -1,28 +1,31 @@
 <template>
-    <div v-if="!isRemoved">
+    <div v-if="!isRemoved" :style="props.isChildComment ? { paddingLeft: '5%' } : {}">
         <v-card variant="text">
             <v-card-title>
-                <v-avatar size="50" class="mr-3">
+                <v-avatar v-if="!isChildComment" size="50" class="mr-3">
                     <img :src="comment.user.photo" alt="avatar" class="avatar-image" />
                 </v-avatar>
                 <span class="headline">{{ comment.user.username }}</span>
                 <span class="comment-time">{{ formattedDate }}</span>
             </v-card-title>
 
-            <v-card-text v-if="!isEditing">
-                <span class="comment-content">{{ comment.content }}</span>
-            </v-card-text>
-
             <v-textarea v-if="Shared.currentUser && isEditing" v-model="content" label="更改评论" rows="10" />
-            <v-btn class="mr-4" v-if="Shared.currentUser && isEditing" @click="confirmEditComment" color="primary" text="保存" />
+            <v-btn class="mr-4" v-if="Shared.currentUser && isEditing" @click="confirmEditComment" color="primary"
+                text="保存" />
             <v-btn class="mr-4" v-if="Shared.currentUser && isEditing" @click="revertEdit" color="primary" text="取消" />
 
+            <!-- 显示内容部分 -->
+            <div v-if="!isEditing" style="padding-left: 1%;">
+                <el-col style="white-space: pre-wrap;">{{ comment.content }}</el-col>
+            </div>
 
             <v-card-actions v-if="Shared.currentUser">
-                <v-btn icon v-if="comment.user.id === Shared.currentUser.id || Shared.currentUser.permission" @click="editComment" size="small">
+                <v-btn icon v-if="comment.user.id === Shared.currentUser.id || Shared.currentUser.permission"
+                    @click="editComment" size="small">
                     <v-icon>mdi-pencil</v-icon>
                 </v-btn>
-                <v-btn icon v-if="comment.user.id === Shared.currentUser.id || Shared.currentUser.permission" @click="confirmRemoveComment" size="small">
+                <v-btn icon v-if="comment.user.id === Shared.currentUser.id || Shared.currentUser.permission"
+                    @click="confirmRemoveComment" size="small">
                     <v-icon>mdi-delete</v-icon>
                 </v-btn>
                 <v-btn icon @click="replyComment" size="small">
@@ -31,17 +34,24 @@
             </v-card-actions>
         </v-card>
 
+        <!-- 添加按钮来展开/折叠子评论 -->
+        <v-btn icon v-if="comment.replies?.length && !isChildComment" @click="toggleRepliesVisibility"
+            size="small">
+            <v-icon>{{ isRepliesVisible ? 'mdi-chevron-double-up' : 'mdi-chevron-double-down' }}</v-icon>
+        </v-btn>
+
+
         <!-- 子评论 -->
-        <div v-if="comment.replies?.length">
+        <div v-if="isChildComment || (isRepliesVisible && comment.replies?.length)">
             <div v-for="reply in comment.replies" :key="reply.id">
-                <CommentCard :comment="reply" />
+                <CommentCard :isChildComment="true" :comment="reply" />
             </div>
         </div>
 
         <!-- 回复表单 -->
         <div v-if="Shared.currentUser && isReplying">
             <v-textarea v-model="replyContent" label="回复" rows="2" />
-            <v-btn @click="postReply(comment.id)" color="primary">发送 回复</v-btn>
+            <v-btn @click="postReply(comment.id)" color="primary">发送回复</v-btn>
         </div>
 
         <v-snackbar v-model="snackbar">
@@ -76,13 +86,22 @@ const isReplying = ref(false);
 const isRemoved = ref(false);
 const isRemoving = ref(false);
 const isEditing = ref(false);
+const isRepliesVisible = ref(false); // 控制子评论显示与隐藏
+const route = useRoute();
 
 const snackbar = ref(false);
 const snackbarMessage = ref('');
 
-const props = defineProps<{
-    comment: Comment;
-}>();
+const props = defineProps({
+    comment: {
+        type: Comment,
+        required: true
+    },
+    isChildComment: {
+        type: Boolean,
+        default: false
+    }
+});
 
 const comment = ref(props.comment);
 
@@ -137,7 +156,7 @@ async function deleteComment() {
 
 async function postReply(parentId: number) {
     try {
-        const id = (useRoute().params as { id: string }).id;
+        const id = (route.params as { id: string }).id;
         const response = await axios.post(`/api/comment/${id}`, {
             content: replyContent.value,
             parent: parentId,
@@ -154,6 +173,11 @@ function showSnackbar(message: string, timeout = 3000) {
     snackbarMessage.value = message;
     snackbar.value = true;
     setTimeout(() => (snackbar.value = false), timeout);
+}
+
+// 切换子评论的显示状态
+function toggleRepliesVisibility() {
+    isRepliesVisible.value = !isRepliesVisible.value;
 }
 </script>
 
