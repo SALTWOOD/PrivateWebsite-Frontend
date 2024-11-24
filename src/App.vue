@@ -18,7 +18,7 @@ This project is created by SaltWood for his own use.
 Any non-commercial use is welcome, although this project was not created for others.
 Current version: ${config.version}.
 
-PrivateWebsite is a personal website
+PrivateWebsite is a personal website.
 
 This software follows the MIT license.
 Copyright (c) 2024 SaltWood.
