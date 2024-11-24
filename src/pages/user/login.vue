@@ -1,45 +1,45 @@
 <template>
-    <v-app>
-        <v-main>
-            <v-container fluid class="d-flex justify-center align-center" style="height: 100vh;">
-                <v-card width="90%" height="90%" class="text-center" style="display: flex; 
+  <v-app>
+    <v-main>
+      <v-container fluid class="d-flex justify-center align-center" style="height: 100vh;">
+        <v-card width="90%" height="90%" class="text-center" style="display: flex; 
                     align-items: center; 
                     justify-content: center;">
-                    <v-card-actions class="pa-2" style="position: absolute; top: 0; left: 0;">
-                        <v-btn icon @click="getBack" color="indigo">
-                            <v-icon>mdi-arrow-left</v-icon>
-                        </v-btn>
-                    </v-card-actions>
-                
-                    <v-card-text v-if="!success && !failure">
-                        <h1 class="mb-5" v-text="`${Shared.info.value.title} - 登录`"></h1>
-                        <v-card :disabled="loading" :loading="loading" color="indigo" append-icon="mdi-open-in-new" class="mx-auto"
-                            max-width="344" prepend-icon="mdi-github" subtitle="点击跳转到 GitHub" title="使用 GitHub 登录" variant="outlined"
-                            @click="getCode">
-                            <template v-slot:loader="{ isActive }">
-                              <v-progress-linear :active="isActive" color="deep-purple" height="4" indeterminate></v-progress-linear>
-                            </template>
-                        </v-card>
-                    </v-card-text>
-                
-                    <!-- 登录成功 -->
-                    <v-card-text v-else-if="success">
-                        <h2 class="mb-5">登录成功！</h2>
-                        <h3>欢迎回来，{{ username }}</h3>
-                        <p>如未自动跳转，请手动跳转</p>
-                    </v-card-text>
-                
-                    <!-- 登录失败 -->
-                    <v-card-text v-else>
-                        <h2 class="mb-5">登录失败</h2>
-                        <p>{{ failureMessageArea }}</p>
-                    </v-card-text>
-                </v-card>
-            </v-container>
-        </v-main>
-    </v-app>
+          <v-card-actions class="pa-2" style="position: absolute; top: 0; left: 0;">
+            <v-btn icon @click="getBack" color="indigo">
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
+          </v-card-actions>
+
+          <v-card-text v-if="!success && !failure">
+            <h1 class="mb-5" v-text="`${Shared.info.value.title} - 登录`"></h1>
+            <v-card :disabled="loading" :loading="loading" color="indigo" append-icon="mdi-open-in-new" class="mx-auto"
+              max-width="344" prepend-icon="mdi-github" subtitle="点击跳转到 GitHub" title="使用 GitHub 登录" variant="outlined"
+              @click="getCode">
+              <template v-slot:loader="{ isActive }">
+                <v-progress-linear :active="isActive" color="deep-purple" height="4" indeterminate></v-progress-linear>
+              </template>
+            </v-card>
+          </v-card-text>
+
+          <!-- 登录成功 -->
+          <v-card-text v-else-if="success">
+            <h2 class="mb-5">登录成功！</h2>
+            <h3>欢迎回来，{{ username }}</h3>
+            <p>如未自动跳转，请手动跳转</p>
+          </v-card-text>
+
+          <!-- 登录失败 -->
+          <v-card-text v-else>
+            <h2 class="mb-5">登录失败</h2>
+            <p>{{ failureMessageArea }}</p>
+          </v-card-text>
+        </v-card>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
-  
+
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -84,7 +84,7 @@ const getCode = async () => {
 const callback = async (code: string) => {
   try {
     const url = `/api/auth/login?code=${code}`;
-    const response = await axios.post<UserEntity & { error: string}>(url);
+    const response = await axios.post<UserEntity & { error: string }>(url);
 
     if (response.status === 200) {
       success.value = true;

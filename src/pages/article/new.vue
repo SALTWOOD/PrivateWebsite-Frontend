@@ -4,34 +4,22 @@
         <form @submit.prevent="submitArticle" class="article-form">
             <div class="form-group">
                 <label for="title">文章标题</label>
-                <v-text-field
-                    v-model="title"
-                    id="title"
-                    label="请输入文章标题"
-                    required
-                />
+                <v-text-field v-model="title" id="title" label="请输入文章标题" required />
             </div>
 
             <div class="form-group">
                 <label for="title">文章描述</label>
-                <v-text-field
-                    v-model="description"
-                    id="description"
-                    label="请输入文章描述"
-                    required
-                />
+                <v-text-field v-model="description" id="description" label="请输入文章描述" required />
             </div>
 
-            <label for="background">背景图片 URL</label>
-            <MdEditor v-model="content" :preview="vuetify.display.mdAndUp.value" :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
+            <label for="background">文章内容</label>
+            <MdEditor v-model="content" :preview="vuetify.display.mdAndUp.value"
+                :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
+            <br />
 
             <div class="form-group">
                 <label for="background">背景图片 URL</label>
-                <v-text-field
-                    v-model="background"
-                    id="background"
-                    label="请输入背景图片的 URL"
-                />
+                <v-text-field v-model="background" id="background" label="请输入背景图片的 URL" />
             </div>
 
             <div class="form-group">
@@ -53,6 +41,8 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { useTheme } from 'vuetify';
 import vuetify from '@/plugins/vuetify';
+import { MdEditor } from 'md-editor-v3';
+import 'md-editor-v3/lib/preview.css';
 
 const title = ref('');
 const content = ref('');

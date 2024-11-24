@@ -4,7 +4,8 @@
         <v-divider />
         <br />
 
-        <v-file-input :rules="rules" v-model="selectedFile" @change="handleFileChange" :disabled="isUploading"></v-file-input>
+        <v-file-input :rules="rules" v-model="selectedFile" @change="handleFileChange"
+            :disabled="isUploading"></v-file-input>
         <button @click="startUpload" :disabled="isUploading">开始上传</button>
 
         <div v-if="isUploading" class="progress-container">
