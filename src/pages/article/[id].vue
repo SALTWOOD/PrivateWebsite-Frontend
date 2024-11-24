@@ -25,8 +25,8 @@
     <br />
 
     <!-- 提交评论 -->
-    <div v-if="isAuthenticated">
-        <v-textarea v-model="newCommentContent" label="评论" rows="3"></v-textarea>
+    <div>
+        <v-textarea v-model="newCommentContent" label="评论" rows="3" :rules="rules"></v-textarea>
         <v-btn @click="postComment" color="primary">发送评论</v-btn>
     </div>
     <br />
@@ -40,6 +40,13 @@
         <!-- 加载更多评论 -->
         <v-btn v-if="hasMoreComments" @click="loadMoreComments" color="secondary">加载更多</v-btn>
     </div>
+
+    <v-snackbar v-model="snackbar">
+        {{ snackbarMessage }}
+        <template v-slot:actions>
+            <v-btn color="primary" text="Close" @click="snackbar = false" />
+        </template>
+    </v-snackbar>
 </template>
 
 <script setup lang="ts">
@@ -66,7 +73,21 @@ const comments = ref<Comment[]>([]);
 const newCommentContent = ref<string>('');
 const page = ref<number>(0);
 const hasMoreComments = ref<boolean>(true);
-const isAuthenticated = computed(() => !!Cookies.get('token')); // 检查是否已登录
+
+
+const snackbar = ref(false);
+const snackbarMessage = ref('');
+
+function showSnackbar(message: string, timeout = 3000) {
+    snackbarMessage.value = message;
+    snackbar.value = true;
+    setTimeout(() => (snackbar.value = false), timeout);
+}
+
+const rules = [
+    (text: string) => text.length <= 512 ? true : '超过长度限制。',
+    (text: string) => Boolean(Shared.currentUser) ? true : '请先登录。'
+]
 
 const isDarkMode = computed(() => vuetify.theme.current.value.dark);
 
@@ -122,7 +143,7 @@ async function deleteArticle() {
 async function postComment() {
     const token = Cookies.get('token');
     if (!token) {
-        alert('You need to be logged in to comment.');
+        showSnackbar('请先登录。');
         return;
     }
 

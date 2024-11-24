@@ -19,10 +19,10 @@
 
 
             <v-card-actions v-if="Shared.currentUser">
-                <v-btn icon @click="editComment" size="small">
+                <v-btn icon v-if="comment.user.id === Shared.currentUser.id || Shared.currentUser.permission" @click="editComment" size="small">
                     <v-icon>mdi-pencil</v-icon>
                 </v-btn>
-                <v-btn icon @click="confirmRemoveComment" size="small">
+                <v-btn icon v-if="comment.user.id === Shared.currentUser.id || Shared.currentUser.permission" @click="confirmRemoveComment" size="small">
                     <v-icon>mdi-delete</v-icon>
                 </v-btn>
                 <v-btn icon @click="replyComment" size="small">

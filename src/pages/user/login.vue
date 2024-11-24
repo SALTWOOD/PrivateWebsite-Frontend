@@ -15,7 +15,7 @@
                         <h1 class="mb-5" v-text="`${Shared.info.value.title} - 登录`"></h1>
                         <v-card :disabled="loading" :loading="loading" color="indigo" append-icon="mdi-open-in-new" class="mx-auto"
                             max-width="344" prepend-icon="mdi-github" subtitle="点击跳转到 GitHub" title="使用 GitHub 登录" variant="outlined"
-                            @click="getcode">
+                            @click="getCode">
                             <template v-slot:loader="{ isActive }">
                               <v-progress-linear :active="isActive" color="deep-purple" height="4" indeterminate></v-progress-linear>
                             </template>
@@ -46,6 +46,7 @@ import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Shared } from '@/types/Shared';
+import { UserEntity } from '@/types/UserEntity';
 
 document.title = `登录 - ${Shared.info.value.title}`;
 
@@ -66,7 +67,7 @@ const getBack = () => {
 }
 
 // 获取客户端 ID
-const getcode = async () => {
+const getCode = async () => {
   try {
     loading.value = true;
     const response = await axios.get('/api/auth/id');
@@ -83,7 +84,7 @@ const getcode = async () => {
 const callback = async (code: string) => {
   try {
     const url = `/api/auth/login?code=${code}`;
-    const response = await axios.post<{ username: string, error: string }> (url);
+    const response = await axios.post<UserEntity & { error: string}>(url);
 
     if (response.status === 200) {
       success.value = true;
@@ -97,6 +98,7 @@ const callback = async (code: string) => {
       loading.value = false;
       console.log("登录失败，状态:", response.status);
     }
+    Shared.currentUser = response.data;
   } catch (error) {
     console.error("登录失败:", error);
     failure.value = true;
