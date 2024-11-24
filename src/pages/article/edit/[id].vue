@@ -27,7 +27,7 @@
                 <v-divider />
 
                 <MdEditor v-model="editedArticle.content" :preview="vuetify.display.mdAndUp.value"
-                    :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" :max-length="1000" />
+                    :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" />
 
                 <!-- 编辑表单 -->
                 <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>
