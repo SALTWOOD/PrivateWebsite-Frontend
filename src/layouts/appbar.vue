@@ -43,6 +43,7 @@
         <v-list class="mt-10" density="compact" nav>
             <v-list-item exact prepend-icon="mdi-home-variant-outline" title="主页" :to="{ path: '/' }" />
             <v-list-item exact prepend-icon="mdi-train" title="开往" href="https://www.travellings.cn/go.html" />
+            <v-list-item exact prepend-icon="mdi-link" title="友链" :to="{ path: '/friends' }" />
             <v-list-item exact prepend-icon="mdi-plus-box-outline" title="创建新文章" :to="{ path: '/article/new' }" v-if="isSuperAdmin" />
             <v-list-item exact prepend-icon="mdi-publish" title="上传文件" :to="{ path: '/upload' }" v-if="isSuperAdmin" />
         </v-list>

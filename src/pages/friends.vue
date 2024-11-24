@@ -3,18 +3,20 @@
         <!-- 顶部图片 -->
         <HeaderImage />
 
+        <br />
+        <h2 class="text-center">这里是友链。</h2>
+
         <!-- 友链展示部分 -->
         <v-container>
             <v-row>
                 <v-col v-for="friend in friends" :key="friend.url" cols="12" sm="6" md="4" lg="3">
                     <v-card class="mx-auto" max-width="300">
-                        <v-img :src="friend.avatar" alt="Avatar" height="150" class="avatar-img" />
+                        <!-- 控制头像大小并留出空间 -->
+                        <v-img :src="friend.avatar" alt="Avatar" class="avatar-img" />
                         <v-card-title>{{ friend.name }}</v-card-title>
                         <v-card-subtitle>{{ friend.description }}</v-card-subtitle>
                         <v-card-actions>
-                            <v-btn :href="friend.url" target="_blank" color="primary" variant="text">
-                                Visit
-                            </v-btn>
+                            <v-btn :href="friend.url" target="_blank" color="primary" variant="text" text="去看看" />
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -67,10 +69,13 @@ onMounted(fetchFriends);
 .avatar-img {
     object-fit: cover;
     border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    margin: 10px auto;
 }
 </style>
 
 <route lang="yaml">
-  meta:
-    layout: appbar
+    meta:
+      layout: appbar
 </route>
