@@ -42,7 +42,7 @@ import axios from 'axios';
 import { useTheme } from 'vuetify';
 import vuetify from '@/plugins/vuetify';
 import { MdEditor } from 'md-editor-v3';
-import 'md-editor-v3/lib/preview.css';
+import 'md-editor-v3/lib/style.css';
 
 const title = ref('');
 const content = ref('');
