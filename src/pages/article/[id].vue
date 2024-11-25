@@ -8,17 +8,21 @@
             <p><strong>{{ article.authorName }}</strong></p>
             <p><em>{{ `发布于 ${formattedDate}` }}</em></p>
             <p><em>{{ `最后更新于 ${formattedUpdateDate}` }}</em></p>
-            <v-divider />
             <br />
 
-            <!-- 修改和删除按钮 -->
-            <div>
-                <v-btn @click="redirectToEditPage" color="primary" class="mr-3">Edit Article</v-btn>
-                <v-btn @click="deleteArticle" color="red" class="mr-3">Delete Article</v-btn>
+            <div v-if="Shared.currentUser && (Shared.currentUser.id === article.author || Shared.currentUser.permission)">
+                <v-divider />
+                <br />
+
+                <!-- 修改和删除按钮 -->
+                <div>
+                    <v-btn @click="redirectToEditPage" color="primary" class="mr-3">Edit Article</v-btn>
+                    <v-btn @click="deleteArticle" color="red" class="mr-3">Delete Article</v-btn>
+                </div>
+                <br />
             </div>
         </div>
     </div>
-    <br />
     <v-divider />
     <br />
 
