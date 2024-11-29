@@ -68,6 +68,8 @@ const fetchData = async () => {
       Shared.info.value = infoResponse.data;
     }
 
+    document.title = Shared.info.value.title;
+
     // 更新状态
     fetchDataStatus.user = true;
     fetchDataStatus.info = true;
