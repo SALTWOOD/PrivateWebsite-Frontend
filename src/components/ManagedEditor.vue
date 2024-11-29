@@ -1,12 +1,11 @@
 <template>
     <MdEditor ref="editor" v-model="props.content" :preview="vuetify.display.mdAndUp.value"
-        :theme="vuetify.theme.global.name.value as 'dark' | 'light'" 
-        @on-upload-img="onUploadImg" @on-drop="onDrop" @on-save="onSave"
-        @on-change="onChange" />
+        :theme="(vuetify.theme.global.name.value as Themes)" @on-upload-img="onUploadImg" @on-drop="onDrop"
+        @on-save="onSave" @on-change="onChange" />
 </template>
 
 <script setup lang="ts">
-import { ExposeParam, MdEditor } from 'md-editor-v3';
+import { ExposeParam, MdEditor, Themes } from 'md-editor-v3';
 import vuetify from '@/plugins/vuetify';
 import 'md-editor-v3/lib/style.css';
 import { FileUploader } from '@/utils/FileUploader';
@@ -15,8 +14,7 @@ import { ref, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 
 const editor = ref<ExposeParam>();
-
-// 用来追踪是否有未保存的内容
+const router = useRouter();
 const isDirty = ref(false);
 
 // Props
@@ -29,7 +27,7 @@ const props = defineProps({
 
 // 图片上传处理
 async function onUploadImg(
-    files: File[], 
+    files: File[],
     callback: (url: string[] | { url: string, alt: string, title: string }[]) => void
 ): Promise<void> {
     const urls = [];
@@ -105,18 +103,15 @@ function handleBeforeUnload(event: BeforeUnloadEvent) {
 }
 
 // 在切换路由时提示
-const router = useRouter();
-router.beforeEach((to, from, next) => {
-    if (isDirty.value) {
-        const confirmLeave = window.confirm('您有未保存的更改，确定要离开吗？\nYour changes will be lost if you leave without saving.');
-        if (confirmLeave) {
-            next(); // 允许切换路由
-        } else {
-            next(false); // 阻止路由切换
-        }
-    } else {
-        next(); // 没有未保存的更改，正常跳转
+const removeHook = router.beforeEach((to, from, next) => {
+    if (isDirty.value && !window.confirm('您有未保存的更改，确定要离开吗？\nYour changes will be lost if you leave without saving.')) {
+        next(false);
+        return;
     }
+    // 移除路由钩子，防止重复执行
+    removeHook();
+    // 跑走！
+    next();
 });
 
 // 注册 window 的 beforeunload 事件
