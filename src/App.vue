@@ -38,6 +38,22 @@ const errorMessage = ref<boolean>(false); // 错误提示状态
 const errorMsg = ref<string>(''); // 错误提示内容
 
 const about = String.raw`
+This project is created by SaltWood for his own use.
+Any non-commercial use is welcome, although this project was not created for others.
+Current version: ${config.version}.
+
+PrivateWebsite is a personal website.
+
+This software follows the MIT license.
+Copyright (c) 2024 SaltWood.
+
+https://github.com/SALTWOOD/PrivateWebsite-Frontend
+https://github.com/SALTWOOD/PrivateWebsite-Backend
+`;
+// @ts-ignore
+window.about = () => console.log(about);
+
+const tip = String.raw`
 /*
  *      ____            _       __     __         _ __
  *     / __ \          | |     / /__  / /_  _____(_) /____
@@ -48,7 +64,7 @@ const about = String.raw`
  *                       Type "about()" for more information.
  */
 `
-console.log(about);
+console.log(tip);
 
 // 请求函数：带超时、错误处理和加载状态
 const fetchData = async () => {
