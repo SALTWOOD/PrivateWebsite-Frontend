@@ -1,6 +1,6 @@
 <template>
     <MdEditor ref="editor" v-model="props.content" :preview="vuetify.display.mdAndUp.value"
-        :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" @on-upload-img="onUploadImg" @on-drop="onDrop" />
+        :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" @on-upload-img="onUploadImg" @on-drop="onDrop" @on-save="onSave" />
 </template>
 
 <script setup lang="ts">
@@ -8,6 +8,7 @@ import { ExposeParam, MdEditor } from 'md-editor-v3';
 import vuetify from '@/plugins/vuetify';
 import 'md-editor-v3/lib/style.css';
 import { FileUploader } from '@/utils/FileUploader';
+import { saveAs } from 'file-saver';
 
 const editor = ref<ExposeParam>();
 
@@ -41,6 +42,11 @@ async function onUploadImg(files: File[], callback: (url: string[] | { url: stri
         }
     }
     callback(urls);
+}
+
+async function onSave(v: string, h: Promise<string>): Promise<void> {
+    const blob = new Blob([v], { type: 'text/plain' });
+    saveAs(blob, 'content.md');
 }
 
 async function onDrop(e: DragEvent): Promise<void> {
