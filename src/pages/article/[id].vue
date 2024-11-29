@@ -183,6 +183,7 @@ function loadMoreComments() {
 
 onMounted(() => {
     fetchArticle();
+    document.title = `${article.value.title} - ${Shared.info.value.title}`;
     fetchComments(); // 初始化加载评论
 });
 </script>

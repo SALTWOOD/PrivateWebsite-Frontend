@@ -31,6 +31,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { FileUploader } from '@/utils/FileUploader';
+import { Shared } from '@/types/Shared';
 
 const fileUploader = new FileUploader();
 const selectedFile = ref<File | null>(null);
@@ -89,6 +90,10 @@ const startUpload = async () => {
         isUploading.value = false;
     }
 };
+
+onMounted(() => {
+    document.title = `文件上传 - ${Shared.info.value.title}`;
+});
 </script>
 
 <style scoped>

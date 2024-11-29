@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import axios from "axios";
+import { Shared } from "@/types/Shared";
 
 // 数据
 const friends: Ref<{ name: string; url: string; avatar: string; description: string }[]> = ref<
@@ -62,7 +63,10 @@ function showError(message: string) {
 }
 
 // 页面加载时获取数据
-onMounted(fetchFriends);
+onMounted(async () => {
+    document.title = `友链 - ${Shared.info.value.title}`;
+    await fetchFriends();
+});
 </script>
 
 <style scoped>

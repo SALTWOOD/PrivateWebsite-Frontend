@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, onBeforeUnmount } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { Article } from '@/types/Article';
@@ -54,30 +54,25 @@ const loading = ref(true);
 const formattedDate = ref<string>('');
 const formattedUpdateDate = ref<string>('');
 
+// 获取主题模式，决定是否启用深色模式
 const isDarkMode = computed(() => vuetify.theme.current.value.dark);
 
+// 设置标题的验证规则
 const titleRules = [
     (v: string) => !!v || 'Title is required',
     (v: string) => v.length <= 100 || 'Title must be less than 100 characters'
 ];
-
-function handleBeforeUnload(event: BeforeUnloadEvent) {
-    if (!isDataSaved.value) {
-        const message = "您有未保存的数据，离开页面可能会丢失这些数据。";
-        event.returnValue = message;  // 旧版浏览器
-        return message;  // 新版浏览器
-    }
-}
-
-let isDataSaved = ref(false);  // 标记是否保存数据
 
 async function fetchArticle() {
     const id = (route.params as { id: string }).id;
     try {
         const response = await axios.get(`/api/articles/${id}`);
         article.value = response.data;
+
+        // 初始化编辑文章内容
         editedArticle.value = { ...article.value };
 
+        // 格式化发布日期
         formattedDate.value = new Date(article.value.publishedAt).toLocaleString();
         formattedUpdateDate.value = new Date(article.value.lastUpdated).toLocaleString();
     } catch (error) {
@@ -95,15 +90,14 @@ async function saveArticle() {
     try {
         const response = await axios.put(`/api/articles/${article.value.id}`, {
             ...editedArticle.value,
-            oldHash: article.value.hash,
-            title: editedArticle.value.title ?? undefined,
+            oldHash: article.value.hash,  // 提供 oldHash 防止并发问题
+            title: editedArticle.value.title ?? undefined,  // 如果没有改动，传 undefined
             content: editedArticle.value.content ?? undefined,
             description: editedArticle.value.description ?? undefined,
             published: editedArticle.value.published ?? undefined,
             background: editedArticle.value.background ?? undefined,
         });
         article.value = response.data;
-        isDataSaved.value = true;  // 保存数据后标记为已保存
         cancel();
     } catch (error) {
         console.error('Error saving article:', error);
@@ -113,25 +107,6 @@ async function saveArticle() {
 onMounted(async () => {
     await fetchArticle();
     document.title = `[EDIT] ${article.value.title} - ${Shared.info.value.title}`;
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('beforeunload', handleBeforeUnload);
-});
-
-// 路由离开时的确认逻辑
-router.beforeEach((to, from, next) => {
-    if (!isDataSaved.value && editedArticle.value !== article.value) {
-        if (window.confirm('您有未保存的数据，是否确认离开？\nYour changes will be lost if you leave without saving.')) {
-            next();  // 继续导航
-        } else {
-            next(false);  // 阻止导航
-        }
-    } else {
-        next();  // 数据已保存，继续导航
-    }
 });
 </script>
 

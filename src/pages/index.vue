@@ -11,11 +11,13 @@
 <script setup lang="ts">
 import HeaderImage from '@/components/HeaderImage.vue'; // 引入 HeaderImage 组件
 import { Article } from '@/types/Article';
+import { Shared } from '@/types/Shared';
 import axios from 'axios';
 
 const articles: Ref<Article[]> = ref([]);
 
 onMounted(async () => {
+    document.title = Shared.info.value.title;
     const data = (await axios.get("/api/articles")).data as Article[];
     articles.value = data.reverse();
 });

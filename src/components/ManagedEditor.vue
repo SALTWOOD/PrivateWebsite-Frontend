@@ -1,6 +1,8 @@
 <template>
     <MdEditor ref="editor" v-model="props.content" :preview="vuetify.display.mdAndUp.value"
-        :theme="(vuetify.theme.global.name.value as 'dark' | 'light')" @on-upload-img="onUploadImg" @on-drop="onDrop" @on-save="onSave" />
+        :theme="vuetify.theme.global.name.value as 'dark' | 'light'" 
+        @on-upload-img="onUploadImg" @on-drop="onDrop" @on-save="onSave"
+        @on-change="onChange" />
 </template>
 
 <script setup lang="ts">
@@ -9,9 +11,15 @@ import vuetify from '@/plugins/vuetify';
 import 'md-editor-v3/lib/style.css';
 import { FileUploader } from '@/utils/FileUploader';
 import { saveAs } from 'file-saver';
+import { ref, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
 
 const editor = ref<ExposeParam>();
 
+// 用来追踪是否有未保存的内容
+const isDirty = ref(false);
+
+// Props
 const props = defineProps({
     content: {
         type: String,
@@ -19,7 +27,11 @@ const props = defineProps({
     }
 });
 
-async function onUploadImg(files: File[], callback: (url: string[] | { url: string, alt: string, title: string }[]) => void): Promise<void> {
+// 图片上传处理
+async function onUploadImg(
+    files: File[], 
+    callback: (url: string[] | { url: string, alt: string, title: string }[]) => void
+): Promise<void> {
     const urls = [];
     for (const file of files) {
         const uploader = new FileUploader();
@@ -30,7 +42,7 @@ async function onUploadImg(files: File[], callback: (url: string[] | { url: stri
                 url: uploader.fileUrl,
                 alt: file.name,
                 title: file.name
-        });
+            });
         } else {
             console.error('Upload failed');
             console.error(uploader.uploadError);
@@ -44,11 +56,14 @@ async function onUploadImg(files: File[], callback: (url: string[] | { url: stri
     callback(urls);
 }
 
+// 内容保存处理
 async function onSave(v: string, h: Promise<string>): Promise<void> {
     const blob = new Blob([v], { type: 'text/plain' });
     saveAs(blob, 'content.md');
+    isDirty.value = false;  // 保存后，重置 dirty 状态
 }
 
+// 文件拖拽处理
 async function onDrop(e: DragEvent): Promise<void> {
     if (e.dataTransfer?.files) {
         const files = Array.from(e.dataTransfer.files);
@@ -76,4 +91,41 @@ async function onDrop(e: DragEvent): Promise<void> {
         }
     }
 }
+
+// 监听内容更改来设置是否为 dirty
+function onChange(v: string): void {
+    isDirty.value = true;
+}
+
+// 在页面刷新或关闭时提示
+function handleBeforeUnload(event: BeforeUnloadEvent) {
+    if (isDirty.value) {
+        event.preventDefault();
+    }
+}
+
+// 在切换路由时提示
+const router = useRouter();
+router.beforeEach((to, from, next) => {
+    if (isDirty.value) {
+        const confirmLeave = window.confirm('您有未保存的更改，确定要离开吗？\nYour changes will be lost if you leave without saving.');
+        if (confirmLeave) {
+            next(); // 允许切换路由
+        } else {
+            next(false); // 阻止路由切换
+        }
+    } else {
+        next(); // 没有未保存的更改，正常跳转
+    }
+});
+
+// 注册 window 的 beforeunload 事件
+onBeforeUnmount(() => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+});
+
+// 在组件挂载时注册事件
+onMounted(() => {
+    window.addEventListener('beforeunload', handleBeforeUnload);
+});
 </script>

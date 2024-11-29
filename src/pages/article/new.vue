@@ -39,6 +39,7 @@ import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { useTheme } from 'vuetify';
+import { Shared } from '@/types/Shared';
 
 const title = ref('');
 const content = ref('');
@@ -76,6 +77,10 @@ async function submitArticle() {
         success.value = false; // Reset success message
     }
 }
+
+onMounted(() => {
+    document.title = `创建新文章 - ${Shared.info.value.title}`;
+});
 </script>
 
 <style scoped>
