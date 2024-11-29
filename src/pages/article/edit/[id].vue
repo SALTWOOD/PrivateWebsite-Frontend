@@ -45,6 +45,7 @@ import HeaderImage from '@/components/HeaderImage.vue';
 import vuetify from '@/plugins/vuetify';
 import router from '@/router';
 import ManagedEditor from '@/components/ManagedEditor.vue';
+import { Shared } from '@/types/Shared';
 
 const route = useRoute();
 const article = ref<Article>(new Article());
@@ -105,6 +106,7 @@ async function saveArticle() {
 
 onMounted(() => {
     fetchArticle();
+    document.title = `[EDIT] ${article.value.title} - ${Shared.info.value.title}`;
 });
 </script>
 
