@@ -104,8 +104,8 @@ async function saveArticle() {
     }
 }
 
-onMounted(() => {
-    fetchArticle();
+onMounted(async () => {
+    await fetchArticle();
     document.title = `[EDIT] ${article.value.title} - ${Shared.info.value.title}`;
 });
 </script>
