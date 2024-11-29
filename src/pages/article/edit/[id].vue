@@ -63,6 +63,10 @@ const titleRules = [
     (v: string) => v.length <= 100 || 'Title must be less than 100 characters'
 ];
 
+function handleBeforeUnload(event: BeforeUnloadEvent) {
+    event.preventDefault();
+}
+
 async function fetchArticle() {
     const id = (route.params as { id: string }).id;
     try {
@@ -107,6 +111,12 @@ async function saveArticle() {
 onMounted(async () => {
     await fetchArticle();
     document.title = `[EDIT] ${article.value.title} - ${Shared.info.value.title}`;
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
 });
 </script>
 
