@@ -26,7 +26,7 @@
                 <p><em>{{ `最后更新于 ${formattedUpdateDate}` }}</em></p>
                 <v-divider />
 
-                <ManagedEditor :content="editedArticle.content" />
+                <ManagedEditor :content="editedArticle.content" :title="article.title" />
 
                 <!-- 编辑表单 -->
                 <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>

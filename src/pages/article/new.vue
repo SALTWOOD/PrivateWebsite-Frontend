@@ -13,7 +13,7 @@
             </div>
 
             <label for="background">文章内容</label>
-            <ManagedEditor :content="content" />
+            <ManagedEditor :content="content" :title="title" />
             <br />
 
             <div class="form-group">
