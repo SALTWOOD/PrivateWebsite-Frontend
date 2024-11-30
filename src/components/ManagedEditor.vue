@@ -36,18 +36,17 @@ async function onUploadImg(
 ): Promise<void> {
     const urls = [];
     for (const file of files) {
-        const uploader = new FileUploader();
-        await uploader.startUploadSession(file);
-        await uploader.uploadFile(file);
-        if (uploader.uploadSuccess) {
+        try {
+            const uploader = new FileUploader();
+            await uploader.startUploadSession(file);
+            const url = await uploader.uploadFile(file);
             urls.push({
-                url: uploader.fileUrl,
+                url,
                 alt: file.name,
                 title: file.name
             });
-        } else {
-            console.error('Upload failed');
-            console.error(uploader.uploadError);
+        } catch (error) {
+            console.error(error);
             urls.push({
                 url: 'Upload failed',
                 alt: file.name,
@@ -70,19 +69,18 @@ async function onDrop(e: DragEvent): Promise<void> {
     if (e.dataTransfer?.files) {
         const files = Array.from(e.dataTransfer.files);
         for (const file of files) {
-            const uploader = new FileUploader();
-            await uploader.startUploadSession(file);
-            await uploader.uploadFile(file);
-            if (uploader.uploadSuccess) {
+            try {
+                const uploader = new FileUploader();
+                await uploader.startUploadSession(file);
+                const url = await uploader.uploadFile(file);
                 editor.value?.insert((selectedText: string) => (
                     {
-                        targetValue: `${selectedText}[${file.name}](${uploader.fileUrl})\n`,
+                        targetValue: `${selectedText}[${file.name}](${url})\n`,
                         select: false
                     }
                 ));
-            } else {
-                console.error('Upload failed');
-                console.error(uploader.uploadError);
+            } catch (error) {
+                console.error(error);
                 editor.value?.insert((selectedText: string) => (
                     {
                         targetValue: `${selectedText}[${file.name}](Upload failed)\n`,
