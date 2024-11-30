@@ -71,18 +71,14 @@ const startUpload = async () => {
         progress.value = 0;
         uploadSuccess.value = false;
 
-        // 启动上传会话
-        await fileUploader.startUploadSession(selectedFile.value);
-
-        // 上传文件
-        await fileUploader.uploadFile(selectedFile.value, (value) => progress.value = value);
-
-        // 上传成功后更新状态
-        if (fileUploader.uploadSuccess) {
+        try {
+            await fileUploader.startUploadSession(selectedFile.value);
+            const url = await fileUploader.uploadFile(selectedFile.value, (value) => progress.value = value);
             uploadSuccess.value = true;
-            fileUrl.value = fileUploader.fileUrl;
-        } else {
-            uploadError.value = fileUploader.uploadError || '上传失败，请稍后重试。';
+            fileUrl.value = url;
+        } catch (error: any) {
+            console.error(error);
+            uploadError.value = error.message || '上传失败，请稍后重试。';
         }
 
         progress.value = 100;
