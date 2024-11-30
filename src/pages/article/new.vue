@@ -4,26 +4,26 @@
         <form @submit.prevent="submitArticle" class="article-form">
             <div class="form-group">
                 <label for="title">文章标题</label>
-                <v-text-field v-model="title" id="title" label="请输入文章标题" required />
+                <v-text-field v-model="article.title" id="title" label="请输入文章标题" required />
             </div>
 
             <div class="form-group">
                 <label for="title">文章描述</label>
-                <v-text-field v-model="description" id="description" label="请输入文章描述" required />
+                <v-text-field v-model="article.description" id="description" label="请输入文章描述" required />
             </div>
 
             <label for="background">文章内容</label>
-            <ManagedEditor :content="content" :title="title" />
+            <ManagedEditor :article="article" :title="article.title" />
             <br />
 
             <div class="form-group">
                 <label for="background">背景图片 URL</label>
-                <v-text-field v-model="background" id="background" label="请输入背景图片的 URL" />
+                <v-text-field v-model="article.background" id="background" label="请输入背景图片的 URL" />
             </div>
 
             <div class="form-group">
                 <label for="published">是否发布</label>
-                <v-checkbox v-model="published" id="published" :label="published ? '已发布' : '未发布'" />
+                <v-checkbox v-model="article.published" id="published" :label="article.published ? '已发布' : '未发布'" />
             </div>
 
             <v-btn type="submit" color="primary" class="submit-button">提交</v-btn>
@@ -40,14 +40,11 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { useTheme } from 'vuetify';
 import { Shared } from '@/types/Shared';
+import { Article } from '@/types/Article';
 
-const title = ref('');
-const content = ref('');
-const description = ref('');
-const background = ref('');
-const published = ref(false);
 const error = ref('');
 const success = ref(false);
+const article = ref<Article>(new Article());
 
 // 获取 Vuetify 的主题信息
 const theme = useTheme();
@@ -58,11 +55,11 @@ const router = useRouter();
 async function submitArticle() {
     try {
         const newArticle = {
-            title: title.value,
-            content: content.value,
-            description: description.value,
-            background: background.value,
-            published: published.value,
+            title: article.value.title,
+            content: article.value.content,
+            description: article.value.description,
+            background: article.value.background,
+            published: article.value.published,
         };
 
         const response = await axios.post('/api/articles', newArticle);

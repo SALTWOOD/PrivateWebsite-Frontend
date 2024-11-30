@@ -26,7 +26,7 @@
                 <p><em>{{ `最后更新于 ${formattedUpdateDate}` }}</em></p>
                 <v-divider />
 
-                <ManagedEditor :content="editedArticle.content" :title="article.title" />
+                <ManagedEditor :article="editedArticle" :title="article.title" />
 
                 <!-- 编辑表单 -->
                 <v-btn @click="saveArticle" color="success" class="mr-3">Save Changes</v-btn>
@@ -70,7 +70,8 @@ async function fetchArticle() {
         article.value = response.data;
 
         // 初始化编辑文章内容
-        editedArticle.value = { ...article.value };
+        editedArticle.value = new Article();
+        Object.assign(editedArticle.value, { ...article.value });
 
         // 格式化发布日期
         formattedDate.value = new Date(article.value.publishedAt).toLocaleString();
@@ -89,7 +90,7 @@ function cancel() {
 async function saveArticle() {
     try {
         const response = await axios.put(`/api/articles/${article.value.id}`, {
-            ...editedArticle.value,
+            id: article.value.id,
             oldHash: article.value.hash,  // 提供 oldHash 防止并发问题
             title: editedArticle.value.title ?? undefined,  // 如果没有改动，传 undefined
             content: editedArticle.value.content ?? undefined,

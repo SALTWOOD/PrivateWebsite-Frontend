@@ -1,5 +1,5 @@
 <template>
-    <MdEditor ref="editor" v-model="props.content" :preview="vuetify.display.mdAndUp.value"
+    <MdEditor ref="editor" v-model="props.article.content" :preview="vuetify.display.mdAndUp.value"
         :theme="(vuetify.theme.global.name.value as Themes)" @on-upload-img="onUploadImg" @on-drop="onDrop"
         @on-save="onSave" />
 </template>
@@ -11,14 +11,15 @@ import 'md-editor-v3/lib/style.css';
 import { FileUploader } from '@/utils/FileUploader';
 import { saveAs } from 'file-saver';
 import { ref } from 'vue';
+import { Article } from '@/types/Article';
 
 const editor = ref<ExposeParam>();
 const isDirty = ref(false);
 
 // Props
 const props = defineProps({
-    content: {
-        type: String,
+    article: {
+        type: Article,
         required: true
     },
     title: {
