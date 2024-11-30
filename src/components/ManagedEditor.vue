@@ -76,7 +76,7 @@ async function onDrop(e: DragEvent): Promise<void> {
             if (uploader.uploadSuccess) {
                 editor.value?.insert((selectedText: string) => (
                     {
-                        targetValue: `[${file.name}](${uploader.fileUrl})\n`,
+                        targetValue: `${selectedText}[${file.name}](${uploader.fileUrl})\n`,
                         select: false
                     }
                 ));
@@ -85,7 +85,7 @@ async function onDrop(e: DragEvent): Promise<void> {
                 console.error(uploader.uploadError);
                 editor.value?.insert((selectedText: string) => (
                     {
-                        targetValue: `[${file.name}](Upload failed)\n`,
+                        targetValue: `${selectedText}[${file.name}](Upload failed)\n`,
                         select: false
                     }
                 ));
