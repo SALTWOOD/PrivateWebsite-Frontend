@@ -15,7 +15,7 @@
                 label="更改评论"
                 rows="10"
             />
-            <v-btn class"mr-3" v-if="Shared.currentUser && isEditing" @click="confirmEditComment" color="primary" text="保存" />
+            <v-btn class="mr-3" v-if="Shared.currentUser && isEditing" @click="confirmEditComment" color="primary" text="保存" />
             <v-btn class="mr-3" v-if="Shared.currentUser && isEditing" @click="revertEdit" color="primary" text="取消" />
 
             <!-- 显示内容部分 -->
