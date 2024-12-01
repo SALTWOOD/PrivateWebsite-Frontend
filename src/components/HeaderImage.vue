@@ -1,10 +1,10 @@
 <template>
   <header>
     <v-card class="mx-auto">
-      <v-img :src="Shared.background" class="blur-image" max-height="200px" cover></v-img>
+      <v-img :src="props.background" class="blur-image" max-height="200px" cover />
       <div class="overlay">
-        <v-card-title class="text-center" style="font-size: 2rem;">{{ Shared.info.value.title }}</v-card-title>
-        <v-card-subtitle class="text-center" style="font-size: 1rem;">{{ Shared.info.value.bio }}</v-card-subtitle>
+        <v-card-title class="text-center" style="font-size: 2rem;" text>{{ props.title }}</v-card-title>
+        <v-card-subtitle class="text-center" style="font-size: 1rem;">{{ props.description }}</v-card-subtitle>
       </div>
     </v-card>
   </header>
@@ -12,6 +12,24 @@
 
 <script setup lang="ts">
 import { Shared } from '@/types/Shared';
+
+const props = defineProps({
+  background: {
+    type: String,
+    required: false,
+    default: () => Shared.background
+  },
+  title: {
+    type: String,
+    required: false,
+    default: () => Shared.info.value.title
+  },
+  description: {
+    type: String,
+    required: false,
+    default: () => Shared.info.value.bio
+  }
+});
 </script>
 
 <style>

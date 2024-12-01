@@ -1,5 +1,5 @@
 <template>
-    <HeaderImage />
+    <HeaderImage :background="editedArticle.background" :title="editedArticle.title" :description="editedArticle.description" />
     <br />
     <div :class="['article-page', { 'dark-mode': isDarkMode }]">
         <div v-if="loading" class="loading">Loading...</div>
