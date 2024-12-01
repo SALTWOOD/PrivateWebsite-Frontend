@@ -16,8 +16,8 @@
 
                 <!-- 修改和删除按钮 -->
                 <div>
-                    <v-btn @click="redirectToEditPage" color="primary" class="mr-3">Edit Article</v-btn>
-                    <v-btn @click="deleteArticle" color="red" class="mr-3">Delete Article</v-btn>
+                    <v-btn @click="redirectToEditPage" color="primary" class="mr-3" text="编辑" />
+                    <v-btn @click="deleteArticle" color="red" class="mr-3" text="删除" />
                 </div>
                 <br />
             </div>
@@ -35,9 +35,9 @@
 
     <!-- 提交评论 -->
     <div>
-        <v-textarea v-model="newCommentContent" label="评论" rows="4" :rules="rules"></v-textarea>
+        <v-textarea v-model="newCommentContent" label="评论" rows="4" :rules="rules" />
         <v-btn @click="postComment" color="primary">
-            <v-icon icon="mdi-send"></v-icon>发送评论
+            <v-icon icon="mdi-send" />发送评论
         </v-btn>
     </div>
     <br />
@@ -51,7 +51,7 @@
         </div>
 
         <!-- 加载更多评论 -->
-        <v-btn v-if="hasMoreComments" @click="loadMoreComments" color="secondary">加载更多</v-btn>
+        <v-btn v-if="hasMoreComments" @click="loadMoreComments" color="secondary" text="加载更多" />
     </div>
 
     <v-snackbar v-model="snackbar">
