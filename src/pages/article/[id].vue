@@ -16,8 +16,8 @@
 
                 <!-- 修改和删除按钮 -->
                 <div>
-                    <v-btn @click="redirectToEditPage" color="primary" class="mr-3" text="编辑" />
-                    <v-btn @click="deleteArticle" color="red" class="mr-3" text="删除" />
+                    <v-btn prependIcon="mdi-pencil" @click="redirectToEditPage" color="primary" class="mr-3" text="编辑" />
+                    <v-btn prependIcon="mdi-delete" @click="deleteArticle" color="red" class="mr-3" text="删除" />
                 </div>
                 <br />
             </div>
