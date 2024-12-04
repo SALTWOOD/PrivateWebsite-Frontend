@@ -72,9 +72,10 @@ const fetchData = async () => {
     // 拉取用户数据和网站信息，设置10秒超时
     const userRequest = axios.get('/api/user', { timeout: TIMEOUT, validateStatus: (status) => true });
     const infoRequest = axios.get('/api/site/info', { timeout: TIMEOUT, validateStatus: (status) => true });
+    const backgroundRequest = axios.get('/api/site/random_background', { timeout: TIMEOUT, validateStatus: (status) => true });
 
     // 等待两个请求完成
-    const [userResponse, infoResponse] = await Promise.all([userRequest, infoRequest]);
+    const [userResponse, infoResponse, backgroundResponse] = await Promise.all([userRequest, infoRequest, backgroundRequest]);
 
     // 处理响应数据
     if (userResponse.status === 200) {
@@ -82,6 +83,9 @@ const fetchData = async () => {
     }
     if (infoResponse.status === 200) {
       Shared.info.value = infoResponse.data;
+    }
+    if (backgroundResponse.status === 200) {
+      Shared.background = backgroundResponse.data;
     }
 
     document.title = Shared.info.value.title;

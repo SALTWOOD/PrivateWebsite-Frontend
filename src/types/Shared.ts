@@ -11,5 +11,5 @@ export class Shared {
 
     public static currentUser: UserEntity | null = null;
 
-    public static background = "https://upy.milu.ink/blog-bg.jpg"//randomBackground();
+    public static background = "";
 }
