@@ -85,7 +85,7 @@ const fetchData = async () => {
       Shared.info.value = infoResponse.data;
     }
     if (backgroundResponse.status === 200) {
-      Shared.background = backgroundResponse.data;
+      Shared.background = backgroundResponse.data.url || '';
     }
 
     document.title = Shared.info.value.title;
