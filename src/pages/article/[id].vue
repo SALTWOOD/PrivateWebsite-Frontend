@@ -1,5 +1,5 @@
 <template>
-    <HeaderImage :background="article.background" :title="article.title" :description="article.description" />
+    <HeaderImage v-if="article.background" :background="article.background" :title="article.title" :description="article.description" />
     <br />
     <div :class="{ 'dark-mode': isDarkMode }" style="padding-left: 1.5%; padding-right: 1.5%;">
         <div v-if="loading" class="loading">Loading...</div>
