@@ -1,5 +1,7 @@
 <template>
-    <div :class="['new-article-page', { 'dark-mode': isDarkMode }]">
+    <HeaderImage :title="article.title" :description="article.description" :background="article.background" />
+    <br />
+    <div :class="{ 'dark-mode': isDarkMode }">
         <h1>创建新文章</h1>
         <form @submit.prevent="submitArticle" class="article-form">
             <div class="form-group">
@@ -41,6 +43,7 @@ import axios from 'axios';
 import { useTheme } from 'vuetify';
 import { Shared } from '@/types/Shared';
 import { Article } from '@/types/Article';
+import HeaderImage from '@/components/HeaderImage.vue';
 
 const error = ref('');
 const success = ref(false);
