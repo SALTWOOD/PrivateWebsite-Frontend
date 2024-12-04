@@ -1,5 +1,5 @@
 <template>
-    <HeaderImage :title="article.title" :description="article.description" :background="article.background" />
+    <HeaderImage v-if="article.background" :title="article.title" :description="article.description" :background="article.background" />
     <br />
     <div :class="{ 'dark-mode': isDarkMode }">
         <h1>创建新文章</h1>
@@ -20,7 +20,7 @@
 
             <div class="form-group">
                 <label for="background">背景图片 URL</label>
-                <v-text-field v-model="article.background" id="background" label="请输入背景图片的 URL" />
+                <v-text-field v-model="article.background" id="background" label="请输入背景图片的 URL" required />
             </div>
 
             <div class="form-group">

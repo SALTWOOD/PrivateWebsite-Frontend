@@ -1,20 +1,20 @@
 <template>
-    <HeaderImage :background="editedArticle.background" :title="editedArticle.title" :description="editedArticle.description" />
+    <HeaderImage v-if="article.background" :background="editedArticle.background" :title="editedArticle.title" :description="editedArticle.description" />
     <br />
     <div :class="['article-page', { 'dark-mode': isDarkMode }]">
         <div v-if="loading" class="loading">Loading...</div>
         <div v-else>
             <v-form ref="form" lazy-validation>
                 <!-- 标题输入框 -->
-                <v-text-field v-model="editedArticle.title" label="标题" outlined :rules="titleRules" class="mb-4" />
+                <v-text-field v-model="editedArticle.title" label="标题" outlined :rules="titleRules" class="mb-4" required />
 
                 <!-- 描述输入框 -->
                 <v-text-field v-model="editedArticle.description" label="描述" outlined :rules="titleRules"
-                    class="mb-4" />
+                    class="mb-4" required />
 
                 <!-- 背景图输入框 -->
                 <v-text-field v-model="editedArticle.background" label="背景图" outlined :rules="titleRules"
-                    class="mb-4" />
+                    class="mb-4" required />
 
                 <!-- 公开状态切换 -->
                 <v-switch v-model="editedArticle.published" :label="editedArticle.published ? '已发布' : '未发布'"
