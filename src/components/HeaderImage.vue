@@ -1,7 +1,7 @@
 <template>
   <header>
     <v-card :height="props.height">
-      <v-img :src="props.background" class="blur-image" max-height="200px" cover />
+      <v-img :src="props.background" class="blur-image" :max-height="props.height" cover />
       <div class="overlay">
         <v-card-title class="text-center" style="font-size: 2rem;" text>{{ props.title }}</v-card-title>
         <v-card-subtitle class="text-center" style="font-size: 1rem;">{{ props.description }}</v-card-subtitle>
