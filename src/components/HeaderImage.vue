@@ -1,6 +1,6 @@
 <template>
   <header>
-    <v-card style="height: 200px;">
+    <v-card :height="props.height">
       <v-img :src="props.background" class="blur-image" max-height="200px" cover />
       <div class="overlay">
         <v-card-title class="text-center" style="font-size: 2rem;" text>{{ props.title }}</v-card-title>
@@ -28,13 +28,18 @@ const props = defineProps({
     type: String,
     required: false,
     default: () => Shared.info.value.bio
-  }
+  },
+  height: {
+    type: Number,
+    required: false,
+    default: 200
+  },
 });
 </script>
 
 <style>
 .blur-image {
-  filter: blur(5px);
+  filter: blur(3px);
 }
 
 .overlay {

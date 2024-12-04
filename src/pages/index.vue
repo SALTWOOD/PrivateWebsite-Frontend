@@ -1,5 +1,5 @@
 <template>
-    <HeaderImage />
+    <HeaderImage :height="300" />
     <br />
     <v-row dense>
         <v-col cols="12" xl="3" lg="4" md="6" v-for="(article, index) in articles" :key="index">
