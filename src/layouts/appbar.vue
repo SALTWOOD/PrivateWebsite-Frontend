@@ -84,7 +84,7 @@ function toggleTheme() {
 }
 
 function logout(): void {
-    Cookies.remove('token');
+    Cookies.remove('pw-token');
     location.reload();
 }
 

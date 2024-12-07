@@ -155,7 +155,7 @@ async function deleteArticle() {
 }
 
 async function postComment() {
-    const token = Cookies.get('token');
+    const token = Cookies.get('pw-token');
     if (!token) {
         showSnackbar('请先登录。');
         return;

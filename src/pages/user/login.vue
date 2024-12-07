@@ -115,7 +115,7 @@ const redirectToHome = () => {
 // 挂载时生命周期钩子
 onMounted(async () => {
   document.title = `登录 - ${Shared.info.value.title}`;
-  if (Cookies.get('token')) {
+  if (Cookies.get('pw-token')) {
     redirectToHome();
   } else if (route.query.code) {
     loading.value = true;
