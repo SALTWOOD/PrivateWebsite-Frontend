@@ -10,7 +10,7 @@
     <br />
     <div v-for="notification in notifications" :key="notification.id" style="padding-left: 1.5%; padding-right: 1.5%;">
         <div>
-            <v-badge color="red" icon="mdi-bell" />
+            <v-badge v-if="!notification.read" color="red" icon="mdi-bell" />
             <CommentCard :comment="notification" style="margin-bottom: 20px; margin-right: 0.5rem;" />
         </div>
     </div>
@@ -34,7 +34,6 @@ import CommentCard from '@/components/CommentCard.vue';
 type Notification = Comment & { read: boolean }
 
 const notifications = ref<Notification[]>([])
-const router = useRouter()
 const total = ref(0)
 const emit = defineEmits(['to-previous-page', 'to-next-page'])
 
