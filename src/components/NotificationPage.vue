@@ -12,7 +12,6 @@
         <div>
             <v-badge color="red" icon="mdi-bell" />
             <CommentCard :comment="notification" style="margin-bottom: 20px; margin-right: 0.5rem;" />
-            <br />
         </div>
     </div>
     <div v-if="notifications.length === 0 && props.page === 0">似乎没有通知……的说</div>
@@ -37,6 +36,7 @@ type Notification = Comment & { read: boolean }
 const notifications = ref<Notification[]>([])
 const router = useRouter()
 const total = ref(0)
+const emit = defineEmits(['to-previous-page', 'to-next-page'])
 
 const props = defineProps({
     page: {
@@ -45,13 +45,8 @@ const props = defineProps({
     }
 })
 
-function toPreviousPage() {
-    router.push(`/notifications/${props.page - 1}`)
-}
-
-function toNextPage() {
-    router.push(`/notifications/${props.page + 1}`)
-}
+const toPreviousPage = () => emit('to-previous-page');
+const toNextPage = () => emit('to-next-page');
 
 async function fetchNotifications() {
     const response = await axios.get<{ data: Notification[], total: number }>(`/api/notifications?all=true&page=${props.page}`);
