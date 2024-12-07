@@ -14,14 +14,14 @@
             <CommentCard :comment="notification" style="margin-bottom: 20px; margin-right: 0.5rem;" />
         </div>
     </div>
-    <div v-if="notifications.length === 0 && props.page === 0">似乎没有通知……的说</div>
-    <div v-if="notifications.length === 0 && props.page > 0">已经到底了！</div>
-    <div v-if="notifications.length > 0 || props.page !== 0">
+    <div v-if="notifications.length === 0 && page === 0">似乎没有通知……的说</div>
+    <div v-if="notifications.length === 0 && page > 0">已经到底了！</div>
+    <div v-if="notifications.length > 0 || page !== 0">
         <br />
         <div>
-            <v-btn :disabled="props.page <= 0" text="上一页" @click="toPreviousPage" class="mr-2" />
-            {{ `第 ${props.page + 1} 页 / 共 ${Math.ceil(total / 10)} 页` }}
-            <v-btn :disabled="props.page >= Math.ceil(total / 10) - 1" text="下一页" @click="toNextPage" class="ml-2" />
+            <v-btn :disabled="page <= 0" text="上一页" @click="toPreviousPage" class="mr-2" />
+            {{ `第 ${page + 1} 页 / 共 ${Math.ceil(total / 10)} 页` }}
+            <v-btn :disabled="page >= Math.ceil(total / 10) - 1" text="下一页" @click="toNextPage" class="ml-2" />
         </div>
     </div>
 </template>
@@ -35,7 +35,7 @@ type Notification = Comment & { read: boolean }
 
 const notifications = ref<Notification[]>([])
 const total = ref(0)
-const emit = defineEmits(['to-previous-page', 'to-next-page'])
+const router = useRouter();
 
 const props = defineProps({
     page: {
@@ -44,11 +44,22 @@ const props = defineProps({
     }
 })
 
-const toPreviousPage = () => emit('to-previous-page');
-const toNextPage = () => emit('to-next-page');
+const page = ref(props.page)
+
+async function toPreviousPage() {
+    page.value -= 1;
+    router.push(`/notifications/${page.value}`);
+    await fetchNotifications();
+}
+
+async function toNextPage() {
+    page.value += 1;
+    router.push(`/notifications/${page.value}`);
+    await fetchNotifications();
+}
 
 async function fetchNotifications() {
-    const response = await axios.get<{ data: Notification[], total: number }>(`/api/notifications?all=true&page=${props.page}`);
+    const response = await axios.get<{ data: Notification[], total: number }>(`/api/notifications?all=true&page=${page}`);
     notifications.value = response.data.data
     total.value = response.data.total;
     notifications.value.forEach((notification) => {
