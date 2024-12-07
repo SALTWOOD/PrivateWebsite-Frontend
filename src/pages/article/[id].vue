@@ -166,7 +166,7 @@ async function postComment() {
         await axios.post(`/api/comment/${id}`, {
             content: newCommentContent.value,
             parent: null
-        }, { headers: { Authorization: `Bearer ${token}` } });
+        });
 
         newCommentContent.value = ''; // 清空输入框
         fetchComments(); // 重新加载评论
