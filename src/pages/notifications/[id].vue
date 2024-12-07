@@ -8,3 +8,8 @@ import NotificationPage from '@/components/NotificationPage.vue';
 const route = useRoute();
 const page = Number((route.params as { id: string }).id) || 0;
 </script>
+
+<route lang="yaml">
+meta:
+  layout: appbar
+</route>

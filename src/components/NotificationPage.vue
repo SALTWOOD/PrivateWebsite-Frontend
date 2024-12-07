@@ -66,8 +66,3 @@ onMounted(async () => {
     await fetchNotifications();
 });
 </script>
-
-<route lang="yaml">
-meta:
-  layout: appbar
-</route>

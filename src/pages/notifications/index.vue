@@ -5,3 +5,8 @@
 <script setup lang="ts">
 import NotificationPage from '@/components/NotificationPage.vue';
 </script>
+
+<route lang="yaml">
+meta:
+  layout: appbar
+</route>
