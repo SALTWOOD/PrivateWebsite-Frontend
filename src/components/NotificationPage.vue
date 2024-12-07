@@ -21,8 +21,8 @@
         <br />
         <div>
             <v-btn :disabled="props.page <= 0" text="上一页" @click="toPreviousPage" class="mr-2" />
-            {{ `第 ${props.page} 页 / ${Math.ceil(notifications.length / 10)} 页` }}
-            <v-btn :disabled="props.page >= Math.ceil(notifications.length / 10) - 1" text="下一页" @click="toNextPage" class="ml-2" />
+            {{ `第 ${props.page + 1} 页 / 共 ${Math.ceil(total / 10)} 页` }}
+            <v-btn :disabled="props.page >= Math.ceil(total / 10) - 1" text="下一页" @click="toNextPage" class="ml-2" />
         </div>
     </div>
 </template>
@@ -36,6 +36,7 @@ type Notification = Comment & { read: boolean }
 
 const notifications = ref<Notification[]>([])
 const router = useRouter()
+const total = ref(0)
 
 const props = defineProps({
     page: {
@@ -53,8 +54,9 @@ function toNextPage() {
 }
 
 async function fetchNotifications() {
-    const response = await axios.get<{ data: Notification[] }>(`/api/notifications?all=true&page=${props.page}`);
+    const response = await axios.get<{ data: Notification[], total: number }>(`/api/notifications?all=true&page=${props.page}`);
     notifications.value = response.data.data
+    total.value = response.data.total;
     notifications.value.forEach((notification) => {
         notification.content = notification.content.length > 200 || notification.content.includes('\n')
             ? `${notification.content.slice(0, Math.min(200, notification.content.indexOf('\n') - 1))}...`
