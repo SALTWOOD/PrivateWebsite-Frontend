@@ -11,7 +11,7 @@
         </template>
 
         <v-app-bar-nav-icon @click="toNotifications">
-            <v-badge :content="notifCount || undefined" color="red">
+            <v-badge :model-value="notifCount !== 0" :content="notifCount" color="red">
                 <v-icon>mdi-bell</v-icon>
             </v-badge>
         </v-app-bar-nav-icon>
