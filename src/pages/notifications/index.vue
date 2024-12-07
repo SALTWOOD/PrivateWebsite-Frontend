@@ -1,9 +1,12 @@
 <template>
-    <NotificationPage :page="0" />
 </template>
 
 <script setup lang="ts">
-import NotificationPage from '@/components/NotificationPage.vue';
+const router = useRouter()
+
+onMounted(() => {
+  router.push('/notifications/0')
+})
 </script>
 
 <route lang="yaml">
