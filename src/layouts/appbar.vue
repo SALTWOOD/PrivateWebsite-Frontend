@@ -10,6 +10,11 @@
             </v-btn>
         </template>
 
+        <v-app-bar-nav-icon @click="toNotifications">
+            <v-badge :content="notifCount" color="red">
+                <v-icon>mdi-bell</v-icon>
+            </v-badge>
+        </v-app-bar-nav-icon>
         <v-app-bar-nav-icon @click="toggleTheme"
             :icon="vuetify.theme.global.name.value === 'dark' ? 'mdi-moon-waxing-crescent' : 'mdi-white-balance-sunny'" />
         <v-menu activator="#menu-activator" :close-on-content-click="false" location="end">
@@ -58,6 +63,7 @@
 import vuetify from '@/plugins/vuetify';
 import router from '@/router';
 import { Shared } from '@/types/Shared';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const isLoggedIn = computed(() => Boolean(Shared.currentUser));
@@ -66,6 +72,7 @@ const userName = computed(() => (Shared.currentUser?.username || '未登录'));
 const avatarUrl = computed(() => Shared.currentUser?.photo || '/main/default_avatar.png');
 const drawer: Ref<boolean | null> = ref(null);
 const isDarkMode = ref(vuetify.theme.current.value.dark);
+const notifCount = ref(0);
 
 function login(): void {
     router.push('/user/login');
@@ -85,6 +92,17 @@ function openDrawer(): void {
     drawer.value = !(drawer.value ?? false);
 }
 
+function toNotifications(): void {
+    router.push('/notifications');
+}
+
+async function fetchNotifCount() {
+    const response = await axios.get<{ count: number }>('/api/notifications/count');
+    const data = response.data;
+    notifCount.value = data.count;
+}
+
 onMounted(async () => {
+    await fetchNotifCount();
 });
 </script>

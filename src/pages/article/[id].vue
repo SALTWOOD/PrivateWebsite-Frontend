@@ -128,7 +128,7 @@ async function fetchComments() {
     try {
         const response = await axios.get(`/api/comment/${id}`, { params: { page: page.value } });
         if (response.data.comments.length > 0) {
-            comments.value.push(...response.data.comments);
+            comments.value.push(...response.data.data);
             page.value += 1;
         } else {
             hasMoreComments.value = false;

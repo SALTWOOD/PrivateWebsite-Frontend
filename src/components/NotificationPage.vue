@@ -1,0 +1,73 @@
+<template>
+    <h1 class="text-center">通知</h1>
+    <br />
+    <v-divider />
+    <br />
+    <v-btn text="标为已读" color="red" @click="markAsRead" />
+    <br />
+    <br />
+    <v-divider />
+    <br />
+    <div v-for="notification in notifications" :key="notification.id" style="padding-left: 1.5%; padding-right: 1.5%;">
+        <v-badge color="red" dot>
+            <v-icon>mdi-bell</v-icon>
+        </v-badge>
+        <CommentCard :comment="notification" style="margin-bottom: 20px;" />
+    </div>
+    <div v-if="notifications.length === 0">似乎没有通知……的说</div>
+    <div v-if="notifications.length > 0">
+    <br />
+    <v-btn text="上一页" @click="toPreviousPage" />
+    <v-btn text="下一页" @click="toNextPage" />
+    </div>
+</template>
+
+<script setup lang="ts">
+import axios from 'axios';
+import { Comment } from '@/types/Comment';
+import CommentCard from '@/components/CommentCard.vue';
+
+type Notification = Comment & { read: boolean }
+
+const notifications = ref<Notification[]>([])
+const router = useRouter()
+
+const props = defineProps({
+    page: {
+        type: Number,
+        required: true,
+    }
+})
+
+function toPreviousPage() {
+    router.push(`/api/notifications/${props.page - 1}`)
+}
+
+function toNextPage() {
+    router.push(`/api/notifications/${props.page + 1}`)
+}
+
+async function fetchNotifications() {
+    const response = await axios.get<{ data: Notification[] }>(`/api/notifications?all=true&page=${props.page}`);
+    notifications.value = response.data.data
+    notifications.value.forEach((notification) => {
+        notification.content = notification.content.length > 200 || notification.content.includes('\n')
+           ? `${notification.content.slice(0, Math.min(200, notification.content.indexOf('\n') - 1))}...`
+            : notification.content;
+    });
+}
+
+async function markAsRead() {
+    await axios.post('/api/notifications/mark_as_read');
+    await fetchNotifications();
+}
+
+onMounted(async () => {
+    await fetchNotifications();
+});
+</script>
+
+<route lang="yaml">
+meta:
+  layout: appbar
+</route>
