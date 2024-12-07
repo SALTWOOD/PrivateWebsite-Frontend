@@ -9,16 +9,20 @@
     <v-divider />
     <br />
     <div v-for="notification in notifications" :key="notification.id" style="padding-left: 1.5%; padding-right: 1.5%;">
-        <v-badge color="red" dot>
-            <v-icon>mdi-bell</v-icon>
-        </v-badge>
-        <CommentCard :comment="notification" style="margin-bottom: 20px;" />
+        <div>
+            <v-badge color="red" icon="mdi-bell" />
+            <CommentCard :comment="notification" style="margin-bottom: 20px; margin-right: 0.5rem;" />
+            <br />
+        </div>
     </div>
     <div v-if="notifications.length === 0">似乎没有通知……的说</div>
     <div v-if="notifications.length > 0">
-    <br />
-    <v-btn text="上一页" @click="toPreviousPage" />
-    <v-btn text="下一页" @click="toNextPage" />
+        <br />
+        <div>
+            <v-btn text="上一页" @click="toPreviousPage" class="mr-2" />
+            {{ `第 ${props.page} 页 / ${Math.ceil(notifications.length / 10)} 页` }}
+            <v-btn text="下一页" @click="toNextPage" class="ml-2" />
+        </div>
     </div>
 </template>
 
@@ -52,7 +56,7 @@ async function fetchNotifications() {
     notifications.value = response.data.data
     notifications.value.forEach((notification) => {
         notification.content = notification.content.length > 200 || notification.content.includes('\n')
-           ? `${notification.content.slice(0, Math.min(200, notification.content.indexOf('\n') - 1))}...`
+            ? `${notification.content.slice(0, Math.min(200, notification.content.indexOf('\n') - 1))}...`
             : notification.content;
     });
 }
