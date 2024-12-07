@@ -59,7 +59,7 @@ async function toNextPage() {
 }
 
 async function fetchNotifications() {
-    const response = await axios.get<{ data: Notification[], total: number }>(`/api/notifications?all=true&page=${page}`);
+    const response = await axios.get<{ data: Notification[], total: number }>(`/api/notifications?all=true&page=${page.value}`);
     notifications.value = response.data.data
     total.value = response.data.total;
     notifications.value.forEach((notification) => {
