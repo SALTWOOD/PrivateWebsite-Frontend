@@ -11,7 +11,7 @@
         </template>
 
         <v-app-bar-nav-icon @click="toNotifications">
-            <v-badge :content="notifCount" color="red">
+            <v-badge :content="notifCount || undefined" color="red">
                 <v-icon>mdi-bell</v-icon>
             </v-badge>
         </v-app-bar-nav-icon>
@@ -98,8 +98,7 @@ function toNotifications(): void {
 
 async function fetchNotifCount() {
     const response = await axios.get<{ count: number }>('/api/notifications/count');
-    const data = response.data;
-    notifCount.value = data.count;
+    notifCount.value = response.data.count;
 }
 
 onMounted(async () => {
