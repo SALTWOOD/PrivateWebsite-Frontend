@@ -44,11 +44,11 @@ const props = defineProps({
 })
 
 function toPreviousPage() {
-    router.push(`/api/notifications/${props.page - 1}`)
+    router.push(`/notifications/${props.page - 1}`)
 }
 
 function toNextPage() {
-    router.push(`/api/notifications/${props.page + 1}`)
+    router.push(`/notifications/${props.page + 1}`)
 }
 
 async function fetchNotifications() {
