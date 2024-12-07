@@ -15,13 +15,14 @@
             <br />
         </div>
     </div>
-    <div v-if="notifications.length === 0">似乎没有通知……的说</div>
-    <div v-if="notifications.length > 0">
+    <div v-if="notifications.length === 0 && props.page === 0">似乎没有通知……的说</div>
+    <div v-if="notifications.length === 0 && props.page > 0">已经到底了！</div>
+    <div v-if="notifications.length > 0 || props.page !== 0">
         <br />
         <div>
-            <v-btn text="上一页" @click="toPreviousPage" class="mr-2" />
+            <v-btn :disabled="props.page <= 0" text="上一页" @click="toPreviousPage" class="mr-2" />
             {{ `第 ${props.page} 页 / ${Math.ceil(notifications.length / 10)} 页` }}
-            <v-btn text="下一页" @click="toNextPage" class="ml-2" />
+            <v-btn :disabled="props.page >= Math.ceil(notifications.length / 10) - 1" text="下一页" @click="toNextPage" class="ml-2" />
         </div>
     </div>
 </template>
