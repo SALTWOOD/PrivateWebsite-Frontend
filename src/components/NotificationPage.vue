@@ -12,7 +12,7 @@
         <div>
             <v-badge v-if="!notification.read" color="red" icon="mdi-bell" />
             <CommentCard :comment="notification" style="margin-bottom: 20px; margin-right: 0.5rem;"
-                @click="toArticle(notification)" />
+                @click-main="toArticle(notification)" :show-actions="false" />
         </div>
     </div>
     <div v-if="notifications.length === 0 && page === 0">似乎没有通知……的说</div>

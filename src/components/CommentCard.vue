@@ -1,11 +1,11 @@
 <template>
     <div v-if="!isRemoved" :style="props.isChildComment ? { paddingLeft: '5%' } : {}">
-        <v-card variant="text">
+        <v-card variant="text" @click="emit('click-main')">
             <v-card-title>
-                <v-avatar v-if="!props.isChildComment" size="50" class="mr-3">
+                <v-avatar v-if="!props.isChildComment" size="50" class="mr-3" @click="emit('click-head')">
                     <img :src="comment.user.photo" alt="avatar" class="avatar-image" />
                 </v-avatar>
-                <span class="headline">{{ comment.user.username }}</span>
+                <span class="headline" @click="emit('click-name')">{{ comment.user.username }}</span>
                 <span class="comment-time">{{ formattedDate }}</span>
             </v-card-title>
 
@@ -23,7 +23,7 @@
                 <el-col style="white-space: pre-wrap;">{{ comment.content }}</el-col>
             </div>
 
-            <v-card-actions v-if="Shared.currentUser">
+            <v-card-actions v-if="(props.showActions === null && Shared.currentUser) || props.showActions">
                 <v-btn
                     icon
                     v-if="canEditOrDelete"
@@ -107,6 +107,8 @@ const isRepliesVisible = ref(false);
 const snackbar = ref(false);
 const snackbarMessage = ref('');
 
+const emit = defineEmits(['click-main', 'click-head', 'click-name']);
+
 // 获取路由信息
 const route = useRoute();
 const props = defineProps({
@@ -117,6 +119,10 @@ const props = defineProps({
     isChildComment: {
         type: Boolean,
         default: false
+    },
+    showActions: {
+        type: Boolean,
+        default: null
     }
 });
 
