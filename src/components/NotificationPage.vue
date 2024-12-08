@@ -14,6 +14,7 @@
             <CommentCard :comment="notification" style="margin-bottom: 20px; margin-right: 0.5rem;"
                 @click-main="toArticle(notification)" :show-actions="false" />
             <v-divider />
+            <br />
         </div>
     </div>
     <div v-if="notifications.length === 0 && page === 0">似乎没有通知……的说</div>
