@@ -11,7 +11,8 @@
     <div v-for="notification in notifications" :key="notification.id" style="padding-left: 1.5%; padding-right: 1.5%;">
         <div>
             <v-badge v-if="!notification.read" color="red" icon="mdi-bell" />
-            <CommentCard :comment="notification" style="margin-bottom: 20px; margin-right: 0.5rem;" />
+            <CommentCard :comment="notification" style="margin-bottom: 20px; margin-right: 0.5rem;"
+                @click="toArticle(notification)" />
         </div>
     </div>
     <div v-if="notifications.length === 0 && page === 0">似乎没有通知……的说</div>
@@ -50,6 +51,10 @@ async function toPreviousPage() {
     page.value -= 1;
     router.push(`/notifications/${page.value}`);
     await fetchNotifications();
+}
+
+async function toArticle(notification: Notification) {
+    await router.push(`/articles/${notification.id}`);
 }
 
 async function toNextPage() {
