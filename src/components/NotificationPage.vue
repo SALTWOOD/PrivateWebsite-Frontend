@@ -56,7 +56,7 @@ async function toPreviousPage() {
 }
 
 async function toArticle(notification: Notification) {
-    await router.push(`/articles/${notification.id}`);
+    await router.push(`/article/${notification.id}`);
 }
 
 async function toNextPage() {
