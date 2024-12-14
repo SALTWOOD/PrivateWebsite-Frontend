@@ -127,7 +127,7 @@ async function fetchComments() {
     const id = (route.params as { id: string }).id;
     try {
         const response = await axios.get(`/api/comment/${id}`, { params: { page: page.value } });
-        if (response.data.comments.length > 0) {
+        if (response.data.data.length > 0) {
             comments.value.push(...response.data.data);
             page.value += 1;
         } else {
