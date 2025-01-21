@@ -45,7 +45,7 @@ const snackbarMessage = ref("");
 // 获取友链数据
 async function fetchFriends() {
     try {
-        const response = await axios.get("/api/site/friends");
+        const response = await axios.get("/api/friends");
         if (response.status === 200) {
             friends.value = response.data;
         } else {
