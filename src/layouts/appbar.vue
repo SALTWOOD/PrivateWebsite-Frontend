@@ -53,7 +53,7 @@
             <v-list-item exact prepend-icon="mdi-publish" title="上传文件" :to="{ path: '/upload' }" v-if="isSuperAdmin" />
             <v-divider />
             <!--接下来将 custom sidebar 里头的加到这里-->
-            <v-list-item exact v-for="item in customSidebar" :key="item.title" :title="item.title" :to="{ path: item.to }" :href="item.href" :prepend-icon="item.icon" />
+            <v-list-item exact class="mt-1" v-for="item in customSidebar" :key="item.title" :title="item.title" :to="{ path: item.to }" :href="item.href" :prepend-icon="item.icon" />
         </v-list>
     </v-navigation-drawer>
 
