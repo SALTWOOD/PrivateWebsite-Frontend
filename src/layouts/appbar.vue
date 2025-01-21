@@ -111,8 +111,8 @@ async function fetchNotifCount() {
 }
 
 async function fetchCustomSidebar() {
-    const response = await axios.get<{ data: { title: string; icon: string; to?: string; href?: string }[] }>('/api/site/sidebar');
-    customSidebar.value = response.data.data;
+    const response = await axios.get<{ title: string; icon: string; to?: string; href?: string }[]>('/api/site/sidebar');
+    customSidebar.value = response.data;
 }
 
 onMounted(async () => {
