@@ -65,7 +65,7 @@ async function fetchNotifications() {
   total.value = response.data.total;
   notifications.value.forEach((notification) => {
       notification.content = notification.content.length > 200 || notification.content.includes('\n')
-          ? `${notification.content.slice(0, Math.min(200, notification.content.indexOf('\n') - 1))}...`
+          ? `${notification.content.slice(0, Math.min(200, notification.content.indexOf('\n')))}...`
           : notification.content;
   });
 }
