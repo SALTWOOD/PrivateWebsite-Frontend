@@ -51,6 +51,9 @@
             <v-list-item exact prepend-icon="mdi-link" title="友链" :to="{ path: '/friends' }" />
             <v-list-item exact prepend-icon="mdi-plus-box-outline" title="创建新文章" :to="{ path: '/article/new' }" v-if="isSuperAdmin" />
             <v-list-item exact prepend-icon="mdi-publish" title="上传文件" :to="{ path: '/upload' }" v-if="isSuperAdmin" />
+            <v-divider />
+            <!--接下来将 custom sidebar 里头的加到这里-->
+            <v-list-item exact v-for="item in customSidebar" :key="item.title" :title="item.title" :to="{ path: item.to }" :href="item.href" :prepend-icon="item.icon" />
         </v-list>
     </v-navigation-drawer>
 
@@ -73,6 +76,12 @@ const avatarUrl = computed(() => Shared.currentUser?.photo || '/main/default_ava
 const drawer: Ref<boolean | null> = ref(null);
 const isDarkMode = ref(vuetify.theme.current.value.dark);
 const notifCount = ref(0);
+const customSidebar: Ref<{
+    title: string;
+    icon: string;
+    to?: string;
+    href?: string;
+}[]> = ref([]);
 
 function login(): void {
     router.push('/user/login');
@@ -101,7 +110,13 @@ async function fetchNotifCount() {
     notifCount.value = response.data.count;
 }
 
+async function fetchCustomSidebar() {
+    const response = await axios.get<{ data: { title: string; icon: string; to?: string; href?: string }[] }>('/api/site/sidebar');
+    customSidebar.value = response.data.data;
+}
+
 onMounted(async () => {
     await fetchNotifCount();
+    await fetchCustomSidebar();
 });
 </script>
