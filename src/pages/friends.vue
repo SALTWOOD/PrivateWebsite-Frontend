@@ -24,7 +24,7 @@
                             <v-btn v-if="Shared.currentUser?.permission && inEdit" icon="mdi-pencil"
                                 @click="showModifyDialog(friend)" />
                             <v-btn v-if="Shared.currentUser?.permission && inEdit" icon="mdi-delete"
-                                @click="removeFriend" />
+                                @click="removeFriend(friend)" />
                             <v-btn v-if="Shared.currentUser?.permission" :href="friend.url" icon="mdi-link-variant" />
                         </v-card-actions>
                     </v-card>
