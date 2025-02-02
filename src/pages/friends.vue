@@ -16,7 +16,10 @@
                         <v-card-title>{{ friend.name }}</v-card-title>
                         <v-card-subtitle>{{ friend.description }}</v-card-subtitle>
                         <v-card-actions>
-                            <v-btn :href="friend.url" target="_blank" color="primary" variant="text" text="去看看" />
+                            <v-btn v-if="!Shared.currentUser?.permission" :href="friend.url" target="_blank" color="primary" variant="text" text="去看看" />
+                            <v-btn v-if="Shared.currentUser?.permission && inEdit" icon="mdi-pencil" @click="modifyFriend" />
+                            <v-btn v-if="Shared.currentUser?.permission && inEdit" icon="mdi-delete" @click="removeFriend" />
+                            <v-btn v-if="Shared.currentUser?.permission" :href="friend.url" icon="mdi-link-variant" />
                         </v-card-actions>
                     </v-card>
                 </v-col>
@@ -34,13 +37,21 @@
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { Shared } from "@/types/Shared";
+import { FriendLink } from "@/types/FriendLink";
 
 // 数据
-const friends: Ref<{ name: string; url: string; avatar: string; description: string }[]> = ref<
-    { name: string; url: string; avatar: string; description: string }[]
+const friends: Ref<FriendLink[]> = ref<
+    FriendLink[]
 >([]);
 const snackbar = ref(false);
 const snackbarMessage = ref("");
+
+const inEdit = ref<boolean>(false);
+
+// @ts-ignore
+window.toggleEdit = () => {
+    inEdit.value = !inEdit.value;
+}
 
 // 获取友链数据
 async function fetchFriends() {
@@ -53,6 +64,25 @@ async function fetchFriends() {
         }
     } catch (error) {
         showError("加载友链数据时出错");
+    }
+}
+
+async function modifyFriend(friend: FriendLink) {
+    throw new Error("Not implemented.");
+    try {
+        await axios.post(`/api/friends/${friend.id}`);
+        await fetchFriends();
+    } catch (error) {
+        showError("更改友链数据时出错")
+    }
+}
+
+async function removeFriend(friend: FriendLink) {
+    try {
+        await axios.delete(`/api/friends/${friend.id}`);
+        await fetchFriends();
+    } catch (error) {
+        showError("删除友链数据时出错")
     }
 }
 
