@@ -1,7 +1,7 @@
-export interface FriendLink {
-    id: number;
-    name: string;
-    url: string;
-    avatar: string;
-    description: string;
+export class FriendLink {
+    id: number = 0;
+    name: string = "";
+    url: string = "";
+    avatar: string = "";
+    description: string = "";
 }

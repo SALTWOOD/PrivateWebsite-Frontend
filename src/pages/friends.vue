@@ -5,6 +5,9 @@
 
         <br />
         <h2 class="text-center">这里是友链。</h2>
+        <br/>
+        <v-divider />
+        <br />
 
         <!-- 友链展示部分 -->
         <v-container>
@@ -16,9 +19,12 @@
                         <v-card-title>{{ friend.name }}</v-card-title>
                         <v-card-subtitle>{{ friend.description }}</v-card-subtitle>
                         <v-card-actions>
-                            <v-btn v-if="!Shared.currentUser?.permission" :href="friend.url" target="_blank" color="primary" variant="text" text="去看看" />
-                            <v-btn v-if="Shared.currentUser?.permission && inEdit" icon="mdi-pencil" @click="modifyFriend" />
-                            <v-btn v-if="Shared.currentUser?.permission && inEdit" icon="mdi-delete" @click="removeFriend" />
+                            <v-btn v-if="!Shared.currentUser?.permission" :href="friend.url" target="_blank"
+                                color="primary" variant="text" text="去看看" />
+                            <v-btn v-if="Shared.currentUser?.permission && inEdit" icon="mdi-pencil"
+                                @click="showModifyDialog(friend)" />
+                            <v-btn v-if="Shared.currentUser?.permission && inEdit" icon="mdi-delete"
+                                @click="removeFriend" />
                             <v-btn v-if="Shared.currentUser?.permission" :href="friend.url" icon="mdi-link-variant" />
                         </v-card-actions>
                     </v-card>
@@ -30,6 +36,26 @@
         <v-snackbar v-model="snackbar" color="red" timeout="3000">
             {{ snackbarMessage }}
         </v-snackbar>
+
+
+
+        <v-dialog v-model="infoDialog" max-width="500px">
+            <v-card>
+                <v-card-title>
+                    <span class="headline">新建/修改友链</span>
+                </v-card-title>
+                <v-card-text>
+                    <v-text-field v-model="link.name" label="名称" required />
+                    <v-text-field v-model="link.description" label="描述" required />
+                    <v-text-field v-model="link.url" label="链接" required />
+                    <v-text-field v-model="link.avatar" label="头像" required />
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn @click="infoDialog = false" color="grey" text="取消" />
+                    <v-btn @click="runAction(link)" color="primary" text="创建" />
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -46,12 +72,11 @@ const friends: Ref<FriendLink[]> = ref<
 const snackbar = ref(false);
 const snackbarMessage = ref("");
 
-const inEdit = ref<boolean>(false);
+const link = ref(new FriendLink());
+const infoDialog = ref(false);
+const infoAction: Ref<"modify" | "create"> = ref("create");
 
-// @ts-ignore
-window.toggleEdit = () => {
-    inEdit.value = !inEdit.value;
-}
+const inEdit = ref<boolean>(false);
 
 // 获取友链数据
 async function fetchFriends() {
@@ -67,13 +92,34 @@ async function fetchFriends() {
     }
 }
 
+function showModifyDialog(friend: FriendLink) {
+    link.value = friend;
+    infoAction.value = "modify";
+    infoDialog.value = true;
+}
+
+function showCreateDialog() {
+    link.value = new FriendLink();
+    infoAction.value = "create";
+    infoDialog.value = true;
+}
+
 async function modifyFriend(friend: FriendLink) {
-    throw new Error("Not implemented.");
+    // throw new Error("Not implemented.");
     try {
-        await axios.post(`/api/friends/${friend.id}`);
+        await axios.put(`/api/friends/${friend.id}`, friend);
         await fetchFriends();
     } catch (error) {
         showError("更改友链数据时出错")
+    }
+}
+
+async function createFriend(friend: FriendLink) {
+    try {
+        await axios.post("/api/friends", friend);
+        await fetchFriends();
+    } catch (error) {
+        showError("添加友链数据时出错")
     }
 }
 
@@ -86,6 +132,17 @@ async function removeFriend(friend: FriendLink) {
     }
 }
 
+function runAction(friend: FriendLink) {
+    switch (infoAction.value) {
+        case "create":
+            createFriend(friend);
+            break;
+        case "modify":
+            modifyFriend(friend);
+            break;
+    }
+}
+
 // 显示错误信息
 function showError(message: string) {
     snackbarMessage.value = message;
@@ -94,6 +151,10 @@ function showError(message: string) {
 
 // 页面加载时获取数据
 onMounted(async () => {
+    Shared.changeButtons({
+        "mdi-plus-thick": showCreateDialog,
+        "mdi-pencil": () => inEdit.value = !inEdit.value
+    });
     document.title = `友链 - ${Shared.info.value.title}`;
     await fetchFriends();
 });

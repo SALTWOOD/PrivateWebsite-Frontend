@@ -110,6 +110,10 @@ const fetchData = async () => {
 // 在组件创建时调用 fetchData
 onMounted(() => {
   fetchData();
+  const router = useRouter();
+  router.beforeEach(() => {
+    Shared.buttons.value.clear();
+  })
 });
 </script>
 

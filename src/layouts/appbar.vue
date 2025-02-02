@@ -9,7 +9,8 @@
                 <v-icon>mdi-account-circle</v-icon>
             </v-btn>
         </template>
-
+        
+        <v-app-bar-nav-icon v-for="i of Shared.buttons.value" :icon="i[0]" @click="i[1]" />
         <v-app-bar-nav-icon @click="toNotifications">
             <v-badge :model-value="notifCount !== 0" :content="notifCount" color="red">
                 <v-icon>mdi-bell</v-icon>
@@ -49,11 +50,13 @@
             <v-list-item exact prepend-icon="mdi-home-variant-outline" title="主页" :to="{ path: '/' }" />
             <v-list-item exact prepend-icon="mdi-train" title="开往" href="https://www.travellings.cn/go.html" />
             <v-list-item exact prepend-icon="mdi-link" title="友链" :to="{ path: '/friends' }" />
-            <v-list-item exact prepend-icon="mdi-plus-box-outline" title="创建新文章" :to="{ path: '/article/new' }" v-if="isSuperAdmin" />
+            <v-list-item exact prepend-icon="mdi-plus-box-outline" title="创建新文章" :to="{ path: '/article/new' }"
+                v-if="isSuperAdmin" />
             <v-list-item exact prepend-icon="mdi-publish" title="上传文件" :to="{ path: '/upload' }" v-if="isSuperAdmin" />
             <v-divider />
             <!--接下来将 custom sidebar 里头的加到这里-->
-            <v-list-item exact class="mt-1" v-for="item in customSidebar" :key="item.title" :title="item.title" :to="{ path: item.to }" :href="item.href" :prepend-icon="item.icon" />
+            <v-list-item exact class="mt-1" v-for="item in customSidebar" :key="item.title" :title="item.title"
+                :to="{ path: item.to }" :href="item.href" :prepend-icon="item.icon" />
         </v-list>
     </v-navigation-drawer>
 
