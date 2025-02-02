@@ -151,7 +151,7 @@ function showError(message: string) {
 
 // 页面加载时获取数据
 onMounted(async () => {
-    Shared.changeButtons({
+    if (Shared.currentUser?.permission) Shared.changeButtons({
         "mdi-plus-thick": showCreateDialog,
         "mdi-pencil": () => inEdit.value = !inEdit.value
     });
