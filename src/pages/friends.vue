@@ -141,6 +141,7 @@ function runAction(friend: FriendLink) {
             modifyFriend(friend);
             break;
     }
+    infoDialog.value = false;
 }
 
 // 显示错误信息
