@@ -37,7 +37,8 @@ const loaded = ref<boolean>(false); // 页面加载状态
 const errorMessage = ref<boolean>(false); // 错误提示状态
 const errorMsg = ref<string>(''); // 错误提示内容
 
-const about = String.raw`
+const about = () => {
+    return String.raw`
 This project is created by SaltWood for his own use.
 Any non-commercial use is welcome, although this project was not created for others.
 Current version: ${config.version}.
@@ -45,13 +46,14 @@ Current version: ${config.version}.
 PrivateWebsite is a personal website.
 
 This software follows the MIT license.
-Copyright (c) 2024 SaltWood.
+Copyright (c) 2024-${Math.max(2024, new Date().getFullYear())} SaltWood.
 
 https://github.com/SALTWOOD/PrivateWebsite-Frontend
 https://github.com/SALTWOOD/PrivateWebsite-Backend
-`;
+`
+}
 // @ts-ignore
-window.about = () => console.log(about);
+window.about = () => console.log(about());
 
 const tip = String.raw`
 /*
