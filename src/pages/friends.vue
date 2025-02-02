@@ -52,7 +52,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-btn @click="infoDialog = false" color="grey" text="取消" />
-                    <v-btn @click="runAction(link)" color="primary" text="创建" />
+                    <v-btn @click="runAction(link)" color="primary" :text="infoAction === 'modify' ? '修改' : '创建'" />
                 </v-card-actions>
             </v-card>
         </v-dialog>
